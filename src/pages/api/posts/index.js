@@ -1,4 +1,4 @@
-import dbConnect from "../../../../utils/dbConnenct";
+import dbConnect from "../../../../utils/dbConnect";
 import Post from "../../../../models/Post";
 
 export default async (req, res) => {

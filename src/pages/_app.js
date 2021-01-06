@@ -2,6 +2,8 @@
 import 'tailwindcss/tailwind.css'
 import '../../styles/global.css'
 import 'nprogress/nprogress.css'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import { Router } from 'next/dist/client/router'
 import Header from "../components/Header";

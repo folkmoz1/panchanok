@@ -1,13 +1,41 @@
-import dbConnect from "../../../utils/dbConnenct";
+import dbConnect from "../../../utils/dbConnect";
 import Post from "../../../models/Post";
-import Card__Component from "../../components/Card";
+import Slider from 'react-slick'
+import Image from "next/image";
 
 
 const Post_Page = ({ post }) => {
 
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    };
+
     return (
         <>
-            <Card__Component post={post} />
+            <div className={'max-w-screen-xl p-8'}>
+                <div className="flex w-full">
+                    <div className="w-full md:w-1/2">
+                        <Slider {...settings}>
+                            {
+                                post.images.map(i => (
+                                    <Image
+                                        src={i.url}
+                                        width={400}
+                                        height={500}
+                                        objectFit={"cover"}
+                                    />
+
+                                ))
+                            }
+                        </Slider>
+                    </div>
+                    <div className="w-full md:w-1/2"></div>
+                </div>
+            </div>
         </>
     )
 }
