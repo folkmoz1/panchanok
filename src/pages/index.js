@@ -2,6 +2,8 @@
 import Post from "../../models/Post";*/
 import Card__Component from "../components/Card";
 import useSWR from "swr";
+import Link from "next/link";
+
 
 const fetcher = (url) =>
     fetch(url)
@@ -31,7 +33,11 @@ const Home = ({ initialData }) => {
                 <div className="py-8 h-full flex flex-wrap items-center flex-col sm:flex-row sm:items-start">
                     {
                         posts.map(post => (
-                            <Card__Component post={post} key={post._id} />
+                            <Link href={'/p/[postId]'} as={`/p/${post._id}`} key={post._id}>
+                                <a>
+                                    <Card__Component post={post} />
+                                </a>
+                            </Link>
                         ))
                     }
                 </div>

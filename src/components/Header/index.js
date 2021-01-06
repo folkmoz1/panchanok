@@ -23,7 +23,7 @@ export default function Header() {
                                     </li>
                                 </a>
                             </Link>
-                            <Link href={'/post/new'}>
+                            <Link href={'/p/new'}>
                                 <a>
                                     <li className={'px-4 py-2 mx-2 md:cursor-pointer hover:text-yellow-400'}>
 

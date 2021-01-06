@@ -1,5 +1,11 @@
 import Image from "next/image";
 import styled from 'styled-components'
+import { dayjs } from '../../../utils/dayjs'
+import 'dayjs/locale/th'
+
+
+dayjs().locale('th')
+
 
 const Card = styled.div`
   display: inline-block;
@@ -74,17 +80,18 @@ const Card = styled.div`
   }
 `
 
-
 const Card__Component = ({ post }) => {
 
-    const { images, title, author, desc } = post
+
+
+    const { images, title, author, desc, createdAt } = post
 
 
     return (
         <>
             <Card>
                 <Image src={images[0].url} layout={'fill'} objectFit={'cover'} alt={author}/>
-                <h1 className={'title'}>{title}</h1>
+                <h1 className={'title'}>• {dayjs(createdAt).fromNow(true)} ที่ผ่านมา</h1>
                 <div className="content">
                     <p className={'author'}>{author}</p>
                     <p className="title-in"> {title}</p>

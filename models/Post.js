@@ -20,10 +20,11 @@ const PostSchema = new mongoose.Schema({
         type: Number
     },
     comment: {
-        type: Array
+        type: Array,
+        default: []
     },
     createdAt: {
-        type: Number
+        type: Number,
     }
 })
 
