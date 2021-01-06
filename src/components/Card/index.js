@@ -39,7 +39,7 @@ const Card = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    background-color: rgb(250, 235, 235);
+    background-color: rgba(250, 235, 235, .9);
     width: 100%;
     height: 100%;
     opacity: 0;
