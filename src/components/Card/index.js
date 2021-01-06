@@ -1,9 +1,6 @@
 import Image from "next/image";
 import styled from 'styled-components'
 import { dayjs } from '../../../utils/dayjs'
-import 'dayjs/locale/th'
-
-
 
 
 const Card = styled.div`
