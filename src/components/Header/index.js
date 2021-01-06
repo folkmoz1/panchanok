@@ -11,8 +11,8 @@ export default function Header() {
                 >
                     <div>
                         <Link href={'/'}>
-                            <a>
-                                <h1 className={'text-2xl uppercase font-bold md:cursor-pointer'}>
+                            <a className={'cursor-default md:cursor-pointer'}>
+                                <h1 className={'text-2xl uppercase font-bold'}>
                                     panchanok
                                 </h1>
                             </a>
