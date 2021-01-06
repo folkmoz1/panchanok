@@ -10,9 +10,13 @@ export default function Header() {
                     className={'p-4 flex justify-between items-center shadow-md'}
                 >
                     <div>
-                        <h1 className={'text-2xl uppercase font-bold md:cursor-pointer'}>
-                            panchanok
-                        </h1>
+                        <Link href={'/'}>
+                            <a>
+                                <h1 className={'text-2xl uppercase font-bold md:cursor-pointer'}>
+                                    panchanok
+                                </h1>
+                            </a>
+                        </Link>
                     </div>
                     <nav>
                         <ul className={'flex items-center'}>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styled from 'styled-components'
 import { dayjs } from '../../../utils/dayjs'
+import Link from "next/link";
 
 
 const Card = styled.div`
@@ -14,6 +15,10 @@ const Card = styled.div`
   position: relative;
   font-size: 100%;
   cursor: pointer;
+  
+  @media (max-width: 768px) {
+    cursor: default;
+  }
 
 
   &:hover {
@@ -22,6 +27,7 @@ const Card = styled.div`
 
   &:hover .content {
     opacity: 1;
+    bottom: 0;
   }
 
   .title {
@@ -39,12 +45,13 @@ const Card = styled.div`
   .content {
     padding: 25px;
     position: absolute;
-    top: 0;
+    bottom: -100%;
     left: 0;
-    background-color: rgba(250, 235, 235, .9);
+    background-color: rgba(250, 235, 235, 1);
     width: 100%;
     height: 100%;
     opacity: 0;
+    border-radius: 1rem;
     pointer-events: none;
     -moz-transition: 0.5s all;
     transition: 0.5s all
@@ -74,6 +81,12 @@ const Card = styled.div`
     border-radius: 1rem;
     font-size: 110%;
   }
+  
+  .link {
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+  }
 `
 
 const Card__Component = ({ post }) => {
@@ -95,6 +108,11 @@ const Card__Component = ({ post }) => {
                         <label className={'text-gray-700 font-bold'}>description</label>
                         <pre className={'text-gray-700'}>{desc}</pre>
                     </div>
+                    {/*<Link href={'/p/[postId]'} as={`/p/${post._id}`}>
+                        <a className={'link'}>
+                           ดูโพสต์
+                        </a>
+                    </Link>*/}
                 </div>
             </Card>
         </>
