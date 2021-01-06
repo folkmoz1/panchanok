@@ -4,7 +4,6 @@ import { dayjs } from '../../../utils/dayjs'
 import 'dayjs/locale/th'
 
 
-dayjs().locale('th')
 
 
 const Card = styled.div`
