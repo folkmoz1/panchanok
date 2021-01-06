@@ -1,3 +1,4 @@
+import NProgress from 'nprogress'
 
 import 'tailwindcss/tailwind.css'
 import '../../styles/global.css'
@@ -6,7 +7,6 @@ import 'nprogress/nprogress.css'
 import { Router } from 'next/dist/client/router'
 import Header from "../components/Header";
 import Head from "next/head";
-import NProgress from 'nprogress'
 
 NProgress.configure({
     showSpinner: false,
