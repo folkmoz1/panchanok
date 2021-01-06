@@ -1,0 +1,77 @@
+@tailwind base;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+*, *:after, *:before {
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+a, button, *:active, *:focus, button:focus {
+    outline: none;
+}
+
+button:active, .button:active {
+    transform: scale(.99);
+}
+
+#__next {
+    height: 100vh;
+    width: 100%;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+button:disabled {
+    opacity: .7;
+    @apply cursor-default bg-gray-50 ring-gray-100 text-gray-600
+}
+
+.svg-icon {
+    width: 1em;
+    height: 1em;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+    fill: #4691f6;
+}
+
+.svg-icon circle {
+    stroke: #4691f6;
+    stroke-width: 1;
+}
+
+.preview__contain {
+    max-width: 400px;
+    max-height: 500px;
+    position: relative;
+}
+
+.preview__contain:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, .2);
+    z-index: 1;
+    opacity: 0;
+}
+
+.preview__contain:hover span, .preview__contain:hover:before {
+    opacity: 1;
+    transition: .2s opacity ease-in-out;
+}
+
+
+
+
+@tailwind components;
+
+@tailwind utilities;
+
+.d-none {
+    display: none;
+}
