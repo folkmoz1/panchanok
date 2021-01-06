@@ -16,20 +16,21 @@ export default function Header() {
                     </div>
                     <nav>
                         <ul className={'flex items-center'}>
-                            <li className={'px-4 py-2 mx-2 md:cursor-pointer hover:text-yellow-400'}>
-                                <Link href={'/'}>
-                                    <a>
-                                        หน้าแรก
-                                    </a>
-                                </Link>
-                            </li>
-                            <li className={'px-4 py-2 mx-2 md:cursor-pointer hover:text-yellow-400'}>
-                                <Link href={'/post/new'}>
-                                    <a>
-                                        สร้างโพสต์
-                                    </a>
-                                </Link>
-                            </li>
+                            <Link href={'/'}>
+                                <a>
+                                    <li className={'px-4 py-2 mx-2 md:cursor-pointer hover:text-yellow-400'}>
+                                    หน้าแรก
+                                    </li>
+                                </a>
+                            </Link>
+                            <Link href={'/post/new'}>
+                                <a>
+                                    <li className={'px-4 py-2 mx-2 md:cursor-pointer hover:text-yellow-400'}>
+
+                                    สร้างโพสต์
+                                    </li>
+                                </a>
+                            </Link>
                         </ul>
                     </nav>
                 </div>
