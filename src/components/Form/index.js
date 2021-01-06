@@ -2,7 +2,6 @@ import {useState, useEffect} from 'react'
 import Image from "next/image";
 import NProgress from 'nprogress'
 import Router from 'next/router'
-import axios from 'axios'
 
 export const fileToDataUri = (image) => {
     return new Promise((res) => {
