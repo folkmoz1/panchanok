@@ -153,7 +153,6 @@ Post_Page.getInitialProps = async ({ req, res, query: {postId} }) => {
         return  { post }
 
     } catch (e) {
-        console.log(e)
         if (req) {
             res.writeHead(302, {
                 Location: '/p/new'
@@ -161,7 +160,6 @@ Post_Page.getInitialProps = async ({ req, res, query: {postId} }) => {
             res.end()
         } else {
             Router.replace('/p/new')
-            return {}
         }
     }
 

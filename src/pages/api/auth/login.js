@@ -30,7 +30,7 @@ export default async (req, res) => {
 
             cookie.set('tr--', rfToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
+                secure: true,
                 sameSite: 'strict',
                 maxAge: 60 * 60 * 24 * 15,
                 path: '/'
@@ -38,7 +38,7 @@ export default async (req, res) => {
 
             cookie.set('ta--', acToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
+                secure: true,
                 sameSite: 'strict',
                 maxAge: 60 * 60,
                 path: '/'

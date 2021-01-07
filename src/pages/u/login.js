@@ -3,6 +3,13 @@ import {useRouter} from "next/router";
 import Image from 'next/image'
 import {useAuth} from "../../context/AuthContext";
 import withoutAuth from "../../hocs/withoutAuth";
+import NProgress from 'nprogress'
+
+NProgress.configure({
+    showSpinner: false,
+    trickleRate: 0.1,
+    trickleSpeed: 800
+})
 
 export default withoutAuth( function Login() {
     const router = useRouter()
@@ -23,6 +30,7 @@ export default withoutAuth( function Login() {
         if (!userType.password || !userType.userOrEmail) return
 
         try {
+            NProgress.start()
             const { userOrEmail, password } = userType
 
             const resp = await fetch('/api/auth/login', {
@@ -35,8 +43,10 @@ export default withoutAuth( function Login() {
 
 
             if (resp.status === 200) {
+
                 const { userJSON } = await resp.json()
                 setMe(userJSON)
+                NProgress.done()
                 router.push('/')
             }
 

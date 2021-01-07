@@ -14,11 +14,17 @@ export const AuthProvider = ({ children, initialData: {user, loggedIn} }) => {
     const [me, setMe] = useState(user)
     const [isLoggedIn, setIsLoggedIn] = useState(loggedIn)
 
+    useEffect(() => {
+        if (me !== null || undefined) {
+            setIsLoggedIn(true)
+        }
+    },[me])
+
     return (
         <AuthContext.Provider value={{
             me,
             setMe,
-            isLoggedIn
+            isLoggedIn,
         }}>
             {children}
         </AuthContext.Provider>
