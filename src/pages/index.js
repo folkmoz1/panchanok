@@ -77,7 +77,7 @@ const Home = ({ initialData }) => {
     return (
         <>
             <div className={'max-w-screen-lg h-full md:h-3/4  mx-auto'}>
-                <div className="py-8 h-full flex flex-wrap items-center flex-col sm:flex-row sm:items-start">
+                <div className="py-8 h-full flex  items-center flex-col sm:flex-wrap sm:flex-row sm:items-start">
                     {
                         posts.map(post => (
                             <Link href={'/p/[postId]'} as={`/p/${post._id}`} key={post._id}>

@@ -5,23 +5,18 @@ import Image from "next/image";
 import styled from "styled-components";
 import {dayjs} from '../../../utils/dayjs'
 
-const Content = styled.div`
-
-
-`
-
+const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+};
 
 const Post_Page = ({post}) => {
 
     const {author, desc, createdAt, images, title} = post
 
-    const settings = {
-        dots: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-    };
 
     return (
         <>
@@ -41,9 +36,6 @@ const Post_Page = ({post}) => {
                                                     alt={post.author}
                                                     quality={100}
                                                 />
-                                                {/*<div>
-                                                    <img src={i.url} alt={post.author}  className={'object-cover'}/>
-                                                </div>*/}
                                             </div>
                                         </span>
                                 ))
@@ -76,6 +68,10 @@ const Post_Page = ({post}) => {
                 </div>
             </div>
             <style jsx global>{`
+              .slick-list, .slick-track {
+                touch-action:pan-y; 
+               }
+  
               .content-editable:empty:before {
                 content: attr(data-placeholder);
                 color: #000;
