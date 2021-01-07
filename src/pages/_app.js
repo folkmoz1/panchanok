@@ -9,6 +9,7 @@ import { Router } from 'next/dist/client/router'
 import Header from "../components/Header";
 import Head from "next/head";
 import NProgress from 'nprogress'
+import cookie from 'cookie'
 
 
 NProgress.configure({
@@ -46,6 +47,14 @@ const MyApp = ({ Component, pageProps }) => {
             `}</style>
         </>
     )
+}
+
+MyApp.getInitialProps = async ({ ctx }) => {
+    let user,loggedIn
+    // const cookie = cookie.parse(ctx.req ? ctx.headers.cookie || "" : undefined)
+
+
+    return { pageProps: {user, loggedIn}}
 }
 
 export default MyApp

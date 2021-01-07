@@ -20,7 +20,7 @@ const fetcher = (url) =>
 const Post_Page = ({post: initialData}) => {
     const {query: {postId}, replace} = useRouter()
 
-    const { data: {data: post}, error } = useSWR(`/api/posts/${postId}`,{ initialData })
+    const { data: post, error } = useSWR(`/api/posts/${postId}`,{ initialData })
 
     if (!post) {
         return <h1>Loading...</h1>
@@ -31,7 +31,7 @@ const Post_Page = ({post: initialData}) => {
     }
 
 
-    const {author, desc, createdAt, images, title} = post
+    const {author, desc, createdAt, images, title} = post.data
 
 
     return (
