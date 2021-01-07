@@ -2,7 +2,6 @@ import dbConnect from "../../../../utils/dbConnect";
 import bcrypt from 'bcrypt'
 import cookie from 'cookie'
 import User from "../../../../models/User";
-import jwt from 'jsonwebtoken'
 
 
 export default async (req, res) => {
@@ -11,7 +10,9 @@ export default async (req, res) => {
 
     if (method === 'POST') {
         try {
-            const { username, email, password, firstName, lastName, } = req.body
+            const { username, email, password, firstName, lastName } = req.body
+
+            console.log(req.body)
 
             const user = await User.findOne({email})
 
@@ -25,15 +26,16 @@ export default async (req, res) => {
                 password: hashedPassword,
                 firstName,
                 lastName,
-                createAt: Date.now()
+                createdAt: Date.now()
             })
 
             await newUser.save()
 
-            return newUser
+            res.status(201).json({success: true})
 
         } catch (err) {
-            throw err
+            res.status(400).json({success: false, message: err.message})
+
         }
     }
 }

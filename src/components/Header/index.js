@@ -25,7 +25,7 @@ export default function Header() {
         <>
             <header>
                 <div
-                    className={'p-4 flex justify-between items-center shadow-md'}
+                    className={'p-4 flex justify-between items-center shadow-md bg-white'}
                 >
                     <div>
                         <Link href={'/'}>
@@ -77,11 +77,13 @@ export default function Header() {
                     </nav>
                 </div>
             </header>
-            <div className={isOpen ? 'modal --active' : 'modal'} onClick={() => setIsOpen(false)}></div>
+            {
+                isMobile &&
+                <div className={isOpen ? 'modal --active' : 'modal'} onClick={() => setIsOpen(false)}></div>
+            }
 
             <style jsx global>{`
-              body {
-                min-height: 100vh;
+              header {
                 width: 100%;
               }
     
@@ -128,7 +130,7 @@ export default function Header() {
                   height: 100%;
                   width: ${isOpen ? '250px' : '0'};
                   position: fixed;
-                  z-index: 2;
+                  z-index: 1999;
                   top: 0;
                   right: 0;
                   background-color: #fff;

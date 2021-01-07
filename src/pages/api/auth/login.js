@@ -1,6 +1,6 @@
 import dbConnect from "../../../../utils/dbConnect";
 import bcrypt from 'bcrypt'
-import cookie from 'cookie'
+import Cookies from 'cookies'
 import User from "../../../../models/User";
 import jwt from 'jsonwebtoken'
 
@@ -11,7 +11,9 @@ export default async (req, res) => {
 
     if (method === 'POST') {
         try {
-            const { userOrEmail, password } = req.body
+            const cookie = new Cookies(req, res)
+
+            const { userOrEmail, password } = JSON.parse(req.body)
 
             const user = await User.findOne({'$or': [{username: userOrEmail}, {email: userOrEmail}]})
 
@@ -26,21 +28,21 @@ export default async (req, res) => {
             const acToken = jwt.sign(payload, process.env.TOKEN_SECRET,{ expiresIn: '15m'})
             const rfToken = jwt.sign(payload, process.env.TOKEN_SECRET,{ expiresIn: '15d'})
 
-            res.setHeader('Set-Cookie', cookie.serialize('ta--', acToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'strict',
-                maxAge: 60 * 15,
-                path: '/'
-            }))
-
-            res.setHeader('Set-Cookie', cookie.serialize('tr--', rfToken, {
+            cookie.set('tr--', rfToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== 'development',
                 sameSite: 'strict',
                 maxAge: 60 * 60 * 24 * 15,
                 path: '/'
-            }))
+            })
+
+            cookie.set('ta--', acToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'strict',
+                maxAge: 60 * 60,
+                path: '/'
+            })
 
             const userJSON = {
                 id: user?._id,

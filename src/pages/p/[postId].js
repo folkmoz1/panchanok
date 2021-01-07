@@ -22,7 +22,7 @@ const Post_Page = ({post: initialData}) => {
 
     const { data: post, error } = useSWR(`/api/posts/${postId}`,{ initialData })
 
-    if (!post) {
+    if (!post?.data) {
         return <h1>Loading...</h1>
     }
 
