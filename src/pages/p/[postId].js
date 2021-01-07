@@ -126,11 +126,11 @@ const Post_Page = ({post}) => {
     )
 }
 
-export const getServerSideProps = async ({ params }) => {
+export const getServerSideProps = async ({ params, query }) => {
     try {
         await dbConnect()
 
-        const post = await Post.findById(params.postId).lean()
+        const post = await Post.findById(query.id).lean()
         post._id = post._id.toString()
 
         return  { props: { post }}
