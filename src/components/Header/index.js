@@ -60,15 +60,15 @@ export default function Header() {
 
                             <li className={'cursor-default my-3 mx-2 md:my-0 md:cursor-pointer'} onClick={() => setIsOpen(false)}>
                                 <Link href={'/'}>
-                                    <a className={'px-4 py-2 hover:text-yellow-400'}>
-                                หน้าแรก
+                                    <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer'}>
+                                    หน้าแรก
                                     </a>
                                 </Link>
                             </li>
 
-                            <li className={'cursor-default my-3 mx-2 md:my-0 md:cursor-pointer'} onClick={() => setIsOpen(false)}>
+                            <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
                                 <Link href={'/p/new'}>
-                                    <a className={'px-4 py-2 hover:text-yellow-400'}>
+                                    <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer'}>
                                         สร้างโพสต์
                                     </a>
                                 </Link>
@@ -159,7 +159,7 @@ export default function Header() {
                   font-size: 160%;
                   opacity: ${isOpen ? 1 : 0};
                   transition: .3s;
-                  display: block;
+                  display: inline-block;
                 }
 
               }
