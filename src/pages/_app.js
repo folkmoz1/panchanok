@@ -83,7 +83,13 @@ MyApp.getInitialProps = async context => {
                 expiresIn: '1h'
             })
 
-            cookie.set('ta--', newToken)
+            cookie.set('ta--', newToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'strict',
+                maxAge: 60 * 60,
+                path: '/'
+            })
         }  catch (e) {
             user = null
             loggedIn = false
