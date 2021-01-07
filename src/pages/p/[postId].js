@@ -1,9 +1,9 @@
-import dbConnect from "../../../utils/dbConnect";
-import Post from "../../../models/Post";
 import Slider from 'react-slick'
 import Image from "next/image";
-import styled from "styled-components";
 import {dayjs} from '../../../utils/dayjs'
+import useSWR from "swr";
+import Router, { useRouter } from "next/router";
+import fetch from "isomorphic-unfetch";
 
 const settings = {
     dots: true,
@@ -12,8 +12,24 @@ const settings = {
     slidesToShow: 1,
     slidesToScroll: 1,
 };
+const fetcher = (url) =>
+    fetch(url)
+        .then((res) => res.json())
+        .then((json) => json.data)
 
-const Post_Page = ({post}) => {
+const Post_Page = ({post: initialData}) => {
+    const {query: {postId}, replace} = useRouter()
+
+    const { data: {data: post}, error } = useSWR(`/api/posts/${postId}`,{ initialData })
+
+    if (!post) {
+        return <h1>Loading...</h1>
+    }
+
+    if (error) {
+        replace('/p/new')
+    }
+
 
     const {author, desc, createdAt, images, title} = post
 
@@ -126,7 +142,29 @@ const Post_Page = ({post}) => {
     )
 }
 
-export const getServerSideProps = async ({ params, query }) => {
+Post_Page.getInitialProps = async ({ req, res, query: {postId} }) => {
+    try {
+        const resp = await fetch(`http://localhost:3000/api/posts/${postId}`)
+
+        const post = await resp.json()
+
+        return  { post }
+
+    } catch (e) {
+        if (req) {
+            res.writeHead(302, {
+                Location: '/p/new'
+            })
+            return {}
+        } else {
+            Router.replace('/p/new')
+            return {}
+        }
+    }
+
+}
+
+/*export const getServerSideProps = async ({ params, query }) => {
     try {
         await dbConnect()
 
@@ -142,6 +180,6 @@ export const getServerSideProps = async ({ params, query }) => {
             }
         }
     }
-}
+}*/
 
 export default Post_Page
