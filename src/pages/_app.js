@@ -17,19 +17,19 @@ NProgress.configure({
     trickleSpeed: 800
 })
 
-Router.events.on('routerChangeStart', () => {
+Router.events.on("routeChangeStart", () => {
     NProgress.start()
-})
-
-Router.events.on('routerChangeComplete', () => {
+});
+Router.events.on("routeChangeComplete", () => {
     NProgress.done()
-})
-
-Router.events.on('routerChangeError', () => {
+});
+Router.events.on("routeChangeError", () => {
     NProgress.done()
-})
+});
+
 
 const MyApp = ({ Component, pageProps }) => {
+
 
     return (
         <>
@@ -39,6 +39,11 @@ const MyApp = ({ Component, pageProps }) => {
             </Head>
             <Header />
             <Component {...pageProps} />
+            <style jsx global>{`
+              #nprogress .bar {
+                background: #78f6cb !important;
+              }
+            `}</style>
         </>
     )
 }
