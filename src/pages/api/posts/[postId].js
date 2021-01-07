@@ -16,7 +16,7 @@ export default async (req, res) => {
 
                 res.status(200).json({success: true, data: post})
             } catch (e) {
-                res.status(400).json({success: false})
+                res.status(404).json({success: false})
             }
             break
     }

@@ -148,14 +148,17 @@ Post_Page.getInitialProps = async ({ req, res, query: {postId} }) => {
 
         const post = await resp.json()
 
+        if (!post?.success) throw new Error()
+
         return  { post }
 
     } catch (e) {
+        console.log(e)
         if (req) {
             res.writeHead(302, {
                 Location: '/p/new'
             })
-            return {}
+            res.end()
         } else {
             Router.replace('/p/new')
             return {}
