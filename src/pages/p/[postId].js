@@ -144,7 +144,7 @@ const Post_Page = ({post: initialData}) => {
 
 Post_Page.getInitialProps = async ({ req, res, query: {postId} }) => {
     try {
-        const resp = await fetch(`http://localhost:3000/api/posts/${postId}`)
+        const resp = await fetch(`/api/posts/${postId}`)
 
         const post = await resp.json()
 
