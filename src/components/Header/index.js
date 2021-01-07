@@ -57,21 +57,22 @@ export default function Header() {
                                    />
                                 </span>
                             }
-                            <Link href={'/'}>
-                                <a className={'cursor-default md:cursor-pointer'}>
-                                    <li className={'px-4 py-2 my-3 mx-2 md:my-0  hover:text-yellow-400'}>
-                                        หน้าแรก
-                                    </li>
-                                </a>
-                            </Link>
-                            <Link href={'/p/new'}>
-                                <a className={'cursor-default md:cursor-pointer'}>
-                                    <li className={'px-4 py-2 mx-2 my-3 md:my-0 hover:text-yellow-400'}>
 
+                            <li className={'cursor-default my-3 mx-2 md:my-0 md:cursor-pointer'} onClick={() => setIsOpen(false)}>
+                                <Link href={'/'}>
+                                    <a className={'px-4 py-2 hover:text-yellow-400'}>
+                                หน้าแรก
+                                    </a>
+                                </Link>
+                            </li>
+
+                            <li className={'cursor-default my-3 mx-2 md:my-0 md:cursor-pointer'} onClick={() => setIsOpen(false)}>
+                                <Link href={'/p/new'}>
+                                    <a className={'px-4 py-2 hover:text-yellow-400'}>
                                         สร้างโพสต์
-                                    </li>
-                                </a>
-                            </Link>
+                                    </a>
+                                </Link>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -79,6 +80,11 @@ export default function Header() {
             <div className={isOpen ? 'modal --active' : 'modal'} onClick={() => setIsOpen(false)}></div>
 
             <style jsx global>{`
+              body {
+                min-height: 100vh;
+                width: 100%;
+              }
+    
               .modal {
                 display: none;
                 transition: background-color .2s;
@@ -86,7 +92,9 @@ export default function Header() {
 
               .modal.--active {
                 display: block;
-                position: absolute;
+                width: 100%;
+                height: 100%;
+                position: fixed;
                 inset: 0;
                 background-color: rgba(0, 0, 0, .4);
                 z-index: 1;
@@ -95,7 +103,8 @@ export default function Header() {
 
               #__next {
                 width: 100%;
-                position: absolute;
+                height: 100%;
+                position: relative;
                 left: ${isOpen ? `-250px` : '0'};
                 transition: .5s;
                 overflow-x: hidden;
@@ -146,12 +155,10 @@ export default function Header() {
                   transition: opacity .2s;
                 }
 
-                ul a li {
+                li a {
                   font-size: 160%;
                   opacity: ${isOpen ? 1 : 0};
-                  transition: opacity .3s;
-                  word-break: keep-all;
-                  text-wrap: normal;
+                  transition: .3s;
                   display: block;
                 }
 
