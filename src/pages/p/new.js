@@ -1,7 +1,8 @@
 import Form from "../../components/Form";
+import withAuth from "../../hocs/withAuth";
 
 
-export default function New() {
+export default withAuth( function New() {
 
     return (
         <>
@@ -12,4 +13,4 @@ export default function New() {
             </div>
         </>
     )
-}
+}, '/u/login')

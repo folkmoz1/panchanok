@@ -1,9 +1,10 @@
 import {useState} from 'react'
 import {useRouter} from "next/router";
 import Image from 'next/image'
-import {useAuth} from "../context/AuthContext";
+import {useAuth} from "../../context/AuthContext";
+import withoutAuth from "../../hocs/withoutAuth";
 
-export default function Login() {
+export default withoutAuth( function Login() {
     const router = useRouter()
 
     const { setMe } = useAuth()
@@ -120,5 +121,5 @@ export default function Login() {
             `}</style>
         </>
     )
-}
+})
 

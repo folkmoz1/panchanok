@@ -1,10 +1,15 @@
 import Link from "next/link";
 import {useEffect, useState} from 'react'
 import {Squeeze as Hamburger} from 'hamburger-react'
+import {useAuth} from "../../context/AuthContext";
+import {useRouter} from "next/router";
 
 export default function Header() {
+    const { asPath } = useRouter()
     const [isOpen, setIsOpen] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
+
+    const {isLoggedIn} = useAuth()
 
     useEffect(() => {
         setIsMobile(window.innerWidth < 768)
@@ -58,21 +63,47 @@ export default function Header() {
                                 </span>
                             }
 
-                            <li className={'cursor-default my-3 mx-2 md:my-0 md:cursor-pointer'} onClick={() => setIsOpen(false)}>
-                                <Link href={'/'}>
-                                    <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer'}>
-                                    หน้าแรก
-                                    </a>
-                                </Link>
-                            </li>
+                            {
+                                isLoggedIn ? (
+                                    <>
+                                        <li className={'cursor-default my-3 mx-2 md:my-0 md:cursor-pointer'}
+                                            onClick={() => setIsOpen(false)}>
+                                            <Link href={'/'}>
+                                                <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer'}>
+                                                    หน้าแรก
+                                                </a>
+                                            </Link>
+                                        </li>
 
-                            <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
-                                <Link href={'/p/new'}>
-                                    <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer'}>
-                                        สร้างโพสต์
-                                    </a>
-                                </Link>
-                            </li>
+                                        <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
+                                            <Link href={'/p/new'}>
+                                                <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer'}>
+                                                    สร้างโพสต์
+                                                </a>
+                                            </Link>
+                                        </li>
+                                    </>
+                                ) : (
+                                        asPath !== '/u/login' ? (
+                                        <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
+                                            <Link href={'/u/login'}>
+                                                <a className={'px-4 py-2 border-2 rounded  border-black cursor-default hover:text-white hover:bg-black  md:cursor-pointer'}>
+                                                    เข้าสู่ระบบ
+                                                </a>
+                                            </Link>
+                                        </li>
+                                    ) : (
+                                        <li className={'cursor-default my-3 mx-2 md:my-0 md:cursor-pointer'}
+                                            onClick={() => setIsOpen(false)}>
+                                            <Link href={'/'}>
+                                                <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer'}>
+                                                    หน้าแรก
+                                                </a>
+                                            </Link>
+                                        </li>
+                                    )
+                                )
+                            }
                         </ul>
                     </nav>
                 </div>

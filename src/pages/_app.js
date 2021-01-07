@@ -33,11 +33,11 @@ Router.events.on("routeChangeError", () => {
 });
 
 
-const MyApp = ({ Component, pageProps, initialProps: {user}}) => {
+const MyApp = ({ Component, pageProps, initialProps}) => {
 
 
     return (
-        <AuthProvider user={user}>
+        <AuthProvider initialData={initialProps}>
             <Head>
                 <title>panchanok | Home</title>
                 <meta name={'description'} content={'my panchanok'}/>
