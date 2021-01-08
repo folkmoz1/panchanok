@@ -2,8 +2,9 @@ import Slider from 'react-slick'
 import Image from "next/image";
 import {dayjs} from '../../../utils/dayjs'
 import useSWR from "swr";
-import Router, { useRouter } from "next/router";
+import Router, {useRouter} from "next/router";
 import fetch from "isomorphic-unfetch";
+import Skeleton from "react-loading-skeleton";
 
 const settings = {
     dots: true,
@@ -17,21 +18,12 @@ const fetcher = (url) =>
         .then((res) => res.json())
         .then((json) => json.data)
 
-const Post_Page = ({post: initialData}) => {
+const Post_Page = ({post: initial}) => {
     const {query: {postId}, replace} = useRouter()
 
-    const { data: post, error } = useSWR(`/api/posts/${postId}`,{ initialData })
-
-    if (!post?.data) {
-        return <h1>Loading...</h1>
-    }
-
-    if (error) {
-        replace('/p/new')
-    }
-
-
-    const {author, desc, createdAt, images, title} = post.data
+    const {data: post, error} = useSWR(() => !initial ? `/api/posts/${postId}` : null, fetcher, {
+        initialData: initial
+    })
 
 
     return (
@@ -41,8 +33,9 @@ const Post_Page = ({post: initialData}) => {
                     <div className="w-full md:w-1/2 md:pt-20">
                         <Slider {...settings}>
                             {
-                                images.map(i => (
-                                    <span key={i.public_id}>
+                                post ? (
+                                    post.images.map(i => (
+                                        <span key={i.public_id}>
                                             <div className={'relative p-2 slider flex justify-center md:p-0'}>
                                                 <Image
                                                     src={i.url}
@@ -55,29 +48,64 @@ const Post_Page = ({post: initialData}) => {
                                                 />
                                             </div>
                                         </span>
-                                ))
+                                    ))
+                                ) : (
+                                    <span>
+                                        <div className={'flex items-center justify-center'}>
+                                        <Skeleton width={350} height={450}/>
+                                        </div>
+                                    </span>
+                                )
                             }
                         </Slider>
                     </div>
                     <div className="w-full md:w-1/2 md:pt-16">
                         <div className="p-4">
                             <div className={'content'}>
-                                <h1 className={'author'}>{author}</h1>
-                                <p className={'timestamp'}>{dayjs(createdAt).fromNow(true)}ที่ผ่านมา</p>
+                                {
+                                    post ? (
+                                        <>
+                                            <h1 className={'author'}>{post.author}</h1>
+                                            <p className={'timestamp'}>{dayjs(post.createdAt).fromNow(true)}ที่ผ่านมา</p>
+
+                                        </>
+                                    ) : (
+                                        <div className={'gap-1 flex flex-col'}>
+                                            <Skeleton width={300} height={40} />
+                                            <Skeleton width={100} height={23} />
+                                        </div>
+                                    )
+                                }
                                 <hr className={'my-2'}/>
                                 <div className={'w-auto flex items-center mt-3'}>
-                                    <span className={'text-2xl mr-3 text-gray-300'}>title |</span>
-                                    <div
-                                        className={`content-editable break-all bg-gray-200 rounded-2xl outline-none p-1 px-4 font-sans inline-block whitespace-pre-wrap `}
-                                        data-placeholder={`${title}`}
-                                        suppressContentEditableWarning
-                                    />
+                                    {
+                                        post ? (
+                                            <>
+                                                <span className={'text-2xl mr-3 text-gray-300'}>title |</span>
+                                                <div
+                                                    className={`content-editable break-all bg-gray-200 rounded-2xl outline-none p-1 px-4 font-sans inline-block whitespace-pre-wrap `}
+                                                    data-placeholder={`${post.title}`}
+                                                    suppressContentEditableWarning
+                                                />
+                                            </>
+                                        ) : (
+                                            <Skeleton width={150} height={35} />
+                                        )
+                                    }
                                 </div>
                                 <div className={'mt-8'}>
-                                    <p className={'ml-3 text-red-400'}>description</p>
-                                    <div className="border-4 border-dashed p-8 m rounded-2xl">
-                                        <p className={'desc'}> {desc}</p>
-                                    </div>
+                                    {
+                                        post ? (
+                                            <>
+                                                <p className={'ml-3 text-red-400'}>description</p>
+                                                <div className="border-4 border-dashed p-8 m rounded-2xl">
+                                                    <p className={'desc'}> {post.desc}</p>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <Skeleton height={100} width={400} />
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -99,7 +127,7 @@ const Post_Page = ({post: initialData}) => {
                 font-size: 120%;
               }
 
-              img[alt="${post.author}"] {
+              img[alt="${post && post.author}"] {
                 width: 100%;
                 height: 100%;
                 border-radius: 1rem;
@@ -144,25 +172,30 @@ const Post_Page = ({post: initialData}) => {
 }
 
 Post_Page.getInitialProps = async ({ req, res, query: {postId} }) => {
-    try {
-        const resp = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/posts/${postId}`)
+    if (req) {
+        try {
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/posts/${postId}`)
 
-        const post = await resp.json()
+            const {data, success} = await resp.json()
 
-        if (!post?.success) throw new Error()
+            if (!success) throw new Error()
 
-        return  { post }
+            return {post: data}
 
-    } catch (e) {
-        if (req) {
-            res.writeHead(302, {
-                Location: '/p/new'
-            })
-            res.end()
-        } else {
-            Router.replace('/p/new')
+        } catch (e) {
+            if (req) {
+                res.writeHead(302, {
+                    Location: '/p/new'
+                })
+                res.end()
+            } else {
+                Router.replace('/p/new')
+            }
         }
+    } else {
+        return {post: null}
     }
+
 
 }
 
