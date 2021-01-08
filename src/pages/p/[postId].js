@@ -5,6 +5,8 @@ import useSWR from "swr";
 import Router, {useRouter} from "next/router";
 import fetch from "isomorphic-unfetch";
 import Skeleton from "react-loading-skeleton";
+import {useAuth} from "../../context/AuthContext";
+import { NProgress } from '../../../utils/NProgress'
 
 const settings = {
     dots: true,
@@ -20,10 +22,31 @@ const fetcher = (url) =>
 
 const Post_Page = ({post: initial}) => {
     const {query: {postId}, replace} = useRouter()
+    const  { me } = useAuth()
 
     const {data: post, error} = useSWR(() => !initial ? `/api/posts/${postId}` : null, fetcher, {
         initialData: initial
     })
+
+    const deletePost = async () => {
+        try {
+            if (confirm('ต้องการลบโพสต์หรือไม่')) {
+                NProgress.start()
+                const resp = await fetch(`/api/posts/${postId}`, {
+                    method: 'DELETE',
+                })
+
+                if (resp?.status === 200) {
+                    replace('/')
+                    NProgress.done()
+                }
+            }
+
+        } catch (e) {
+            NProgress.done()
+            console.log(e)
+        }
+    }
 
 
     return (
@@ -65,7 +88,17 @@ const Post_Page = ({post: initial}) => {
                                 {
                                     post ? (
                                         <>
-                                            <h1 className={'author'}>{post.author}</h1>
+                                            <div className={'flex justify-between items-center'}>
+                                                <h1 className={'author'}>{post.author}</h1>
+                                                {
+                                                    me &&
+                                                    <a
+                                                        onClick={deletePost}
+                                                        className={'text-xl text-red-600 underline md:cursor-pointer button'}>
+                                                        ลบโพสต์
+                                                    </a>
+                                                }
+                                            </div>
                                             <p className={'timestamp'}>{dayjs(post.createdAt).fromNow(true)}ที่ผ่านมา</p>
 
                                         </>

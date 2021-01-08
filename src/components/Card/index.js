@@ -99,7 +99,7 @@ const Card__Component = ({ post }) => {
     return (
         <>
             <Card>
-                <Image src={images[0].url} layout={'fill'} objectFit={'cover'} alt={author}/>
+                <Image src={images[0].url} layout={'fill'} objectFit={'cover'} loading={"eager"} alt={author}/>
                 <h1 className={'title'}>• {dayjs(createdAt).fromNow(true)} ที่ผ่านมา</h1>
                 <div className="content">
                     <p className={'author'}>{author}</p>
@@ -108,11 +108,7 @@ const Card__Component = ({ post }) => {
                         <label className={'text-gray-700 font-bold'}>description</label>
                         <pre className={'text-gray-700'}>{desc}</pre>
                     </div>
-                    {/*<Link href={'/p/[postId]'} as={`/p/${post._id}`}>
-                        <a className={'link'}>
-                           ดูโพสต์
-                        </a>
-                    </Link>*/}
+
                 </div>
             </Card>
         </>

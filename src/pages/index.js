@@ -10,14 +10,13 @@ const fetcher = (url) =>
         .then((res) => res.json())
         .then((json) => json.data)
 
-const Home = ({ initialData }) => {
+const Home = () => {
 
-    /*const { data: posts, error } = useSWR('/api/posts', fetcher, {
-        initialData,
+    const { data: posts, error } = useSWR('/api/posts', fetcher, {
         revalidateOnMount: true
-    })*/
+    })
 
-    const { data: posts, error } = useSWR('/api/posts', fetcher)
+    // const { data: posts, error } = useSWR('/api/posts', fetcher)
 
     if (!posts) {
         return (
@@ -93,21 +92,6 @@ const Home = ({ initialData }) => {
     )
 }
 
-/*export const getServerSideProps = async ({req, res}) => {
-    await dbConnect()
 
-    const results = await Post.find({})
-    const posts = results.map(doc => {
-        const post = doc.toObject()
-        post._id = post._id.toString()
-        return post
-    })
-
-    return {
-        props:{
-            initialData: posts
-        }
-    }
-}*/
 
 export default Home
