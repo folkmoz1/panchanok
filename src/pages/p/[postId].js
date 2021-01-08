@@ -43,7 +43,7 @@ const Post_Page = ({post: initialData}) => {
                             {
                                 images.map(i => (
                                     <span key={i.public_id}>
-                                            <div className={'p-2 slider flex justify-center md:p-0'}>
+                                            <div className={'relative p-2 slider flex justify-center md:p-0'}>
                                                 <Image
                                                     src={i.url}
                                                     width={350}
@@ -51,6 +51,7 @@ const Post_Page = ({post: initialData}) => {
                                                     objectFit={"cover"}
                                                     alt={post.author}
                                                     quality={100}
+                                                    loading={"eager"}
                                                 />
                                             </div>
                                         </span>

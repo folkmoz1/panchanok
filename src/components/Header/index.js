@@ -3,13 +3,14 @@ import {useEffect, useState} from 'react'
 import {Squeeze as Hamburger} from 'hamburger-react'
 import {useAuth} from "../../context/AuthContext";
 import {useRouter} from "next/router";
+import Image from 'next/image'
 
 export default function Header() {
     const { asPath } = useRouter()
     const [isOpen, setIsOpen] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
 
-    const {isLoggedIn} = useAuth()
+    const {isLoggedIn, handleLogout, me} = useAuth()
 
     useEffect(() => {
         setIsMobile(window.innerWidth < 768)
@@ -30,7 +31,7 @@ export default function Header() {
         <>
             <header>
                 <div
-                    className={'p-4 flex justify-between items-center shadow-md bg-white'}
+                    className={'p-4 flex justify-between items-center shadow-md bg-white md:px-8'}
                 >
                     <div>
                         <Link href={'/'}>
@@ -82,12 +83,20 @@ export default function Header() {
                                                 </a>
                                             </Link>
                                         </li>
+                                        <div className={'avatar'}>
+                                            <Image
+                                                src={me.image}
+                                                width={35}
+                                                height={35}
+                                                objectFit={"cover"}
+                                            />
+                                        </div>
                                     </>
                                 ) : (
                                         asPath !== '/u/login' ? (
                                         <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
                                             <Link href={'/u/login'}>
-                                                <a className={'px-4 py-2 border-2 rounded  border-black cursor-default hover:text-white hover:bg-black  md:cursor-pointer'}>
+                                                <a className={'px-4 py-2 border rounded  border-black cursor-default hover:text-white hover:bg-black  md:cursor-pointer'}>
                                                     เข้าสู่ระบบ
                                                 </a>
                                             </Link>
@@ -114,6 +123,15 @@ export default function Header() {
             }
 
             <style jsx global>{`
+              .avatar {
+                position: relative;
+                border-radius: 50%;
+                width: 35px;
+                height: 35px;
+                overflow: hidden;
+                cursor: pointer;
+              }
+
               header {
                 width: 100%;
               }

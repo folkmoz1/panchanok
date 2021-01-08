@@ -2,6 +2,7 @@ import dbConnect from "../../../../utils/dbConnect";
 import bcrypt from 'bcrypt'
 import Cookies from 'cookies'
 import User from "../../../../models/User";
+import { serialize } from 'cookie'
 import jwt from 'jsonwebtoken'
 
 
@@ -26,7 +27,7 @@ export default async (req, res) => {
             const payload = { sub: user?._id, email: user?.email }
 
             const acToken = jwt.sign(payload, process.env.TOKEN_SECRET,{ expiresIn: '15m'})
-            const rfToken = jwt.sign(payload, process.env.TOKEN_SECRET,{ expiresIn: '15d'})
+            const rfToken = jwt.sign({...payload, version: user?.tokenVersion}, process.env.TOKEN_SECRET,{ expiresIn: '15d'})
 
             cookie.set('tr--', rfToken, {
                 httpOnly: true,
@@ -40,10 +41,9 @@ export default async (req, res) => {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'strict',
-                maxAge: 60 * 60,
+                maxAge: 3600,
                 path: '/'
             })
-
             const userJSON = {
                 id: user?._id,
                 username: user?.username,

@@ -8,19 +8,16 @@ import "slick-carousel/slick/slick-theme.css";
 import { Router } from 'next/dist/client/router'
 import Header from "../components/Header";
 import Head from "next/head";
-import NProgress from 'nprogress'
+import { NProgress } from '../../utils/NProgress'
 import Cookies from 'cookies'
 import fetch from "isomorphic-unfetch";
 import App from "next/app";
 import {AuthProvider} from "../context/AuthContext";
 import jwt from 'jsonwebtoken'
+import { serialize } from 'cookie'
 
 
-NProgress.configure({
-    showSpinner: false,
-    trickleRate: 0.1,
-    trickleSpeed: 800
-})
+
 
 Router.events.on("routeChangeStart", () => {
     NProgress.start()
@@ -59,6 +56,7 @@ MyApp.getInitialProps = async context => {
     let user, loggedIn
 
     if (req) {
+
         const cookie = new Cookies(req, res)
 
         try {
@@ -83,13 +81,13 @@ MyApp.getInitialProps = async context => {
                 expiresIn: '1h'
             })
 
-            cookie.set('ta--', newToken, {
+            res.setHeader('Set-Cookie', serialize('ta--', newToken, {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'strict',
-                maxAge: 60 * 60,
+                maxAge: 3600,
                 path: '/'
-            })
+            }))
         }  catch (e) {
             user = null
             loggedIn = false
