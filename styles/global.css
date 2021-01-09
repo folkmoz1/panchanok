@@ -68,6 +68,10 @@ button:disabled {
 
 @tailwind utilities;
 
+.text-1r {
+    font-size: 1rem;
+}
+
 .d-none {
     display: none;
 }

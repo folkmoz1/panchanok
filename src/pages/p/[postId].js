@@ -7,6 +7,7 @@ import fetch from "isomorphic-unfetch";
 import Skeleton from "react-loading-skeleton";
 import {useAuth} from "../../context/AuthContext";
 import { NProgress } from '../../../utils/NProgress'
+import useResize from "../../hooks/useResize";
 
 const settings = {
     dots: true,
@@ -14,6 +15,7 @@ const settings = {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    arrows: false
 };
 const fetcher = (url) =>
     fetch(url)
@@ -23,6 +25,7 @@ const fetcher = (url) =>
 const Post_Page = ({post: initial}) => {
     const {query: {postId}, replace} = useRouter()
     const  { me } = useAuth()
+    const { isMobile } = useResize()
 
     const {data: post, error} = useSWR(() => !initial ? `/api/posts/${postId}` : null, fetcher, {
         initialData: initial
@@ -136,7 +139,7 @@ const Post_Page = ({post: initial}) => {
                                                 </div>
                                             </>
                                         ) : (
-                                            <Skeleton height={100} width={400} />
+                                            <Skeleton height={100} width={isMobile ? '100%' : 400} />
                                         )
                                     }
                                 </div>

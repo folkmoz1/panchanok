@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {Squeeze as Hamburger} from 'hamburger-react'
 import {useAuth} from "../../context/AuthContext";
 import {useRouter} from "next/router";
@@ -12,10 +12,14 @@ export default function Header() {
     const [loading, setLoading] = useState(false)
 
 
-    const { isMobile } = useResize({isOpen, setIsOpen})
+    const { isMobile } = useResize()
     const {isLoggedIn, handleLogout, me} = useAuth()
 
-
+    useEffect(() => {
+        if (!isMobile && isOpen) {
+            setIsOpen(false)
+        }
+    },[isMobile])
 
     return (
         <>
@@ -95,24 +99,24 @@ export default function Header() {
                                         </li>
                                     </>
                                 ) : (
-                                        asPath !== '/u/login' ? (
+                                    <>
                                         <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
                                             <Link href={'/u/login'}>
-                                                <a className={'px-4 py-2 border rounded  border-black cursor-default hover:text-white hover:bg-black  md:cursor-pointer'}>
-                                                    เข้าสู่ระบบ
+                                                <a className={'px-4 py-2 text-1r rounded cursor-default   md:cursor-pointer'}>
+                                                    SIGN IN
                                                 </a>
                                             </Link>
                                         </li>
-                                    ) : (
-                                        <li className={'cursor-default my-3 mx-2 md:my-0 md:cursor-pointer'}
-                                            onClick={() => setIsOpen(false)}>
-                                            <Link href={'/'}>
-                                                <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer'}>
-                                                    หน้าแรก
+
+                                        <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
+                                            <Link href={'/u/register'}>
+                                                <a className={'px-4 font-medium text-1r py-2 border rounded  border-green-400 text-white bg-green-400 cursor-default md:cursor-pointer'}>
+                                                    SIGN UP
                                                 </a>
                                             </Link>
                                         </li>
-                                    )
+                                    </>
+
                                 )
                             }
                         </ul>
