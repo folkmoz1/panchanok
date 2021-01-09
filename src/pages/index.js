@@ -3,6 +3,7 @@ import Post from "../../models/Post";*/
 import Card__Component from "../components/Card";
 import useSWR from "swr";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 
 const fetcher = (url) =>
@@ -10,13 +11,13 @@ const fetcher = (url) =>
         .then((res) => res.json())
         .then((json) => json.data)
 
+
 const Home = () => {
 
     const { data: posts, error } = useSWR('/api/posts', fetcher, {
         revalidateOnMount: true
     })
 
-    // const { data: posts, error } = useSWR('/api/posts', fetcher)
 
     if (!posts) {
         return (

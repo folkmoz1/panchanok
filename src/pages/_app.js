@@ -15,6 +15,7 @@ import App from "next/app";
 import {AuthProvider} from "../context/AuthContext";
 import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
+import {AnimatePresence} from "framer-motion";
 
 
 
@@ -40,7 +41,9 @@ const MyApp = ({ Component, pageProps, initialProps}) => {
                 <meta name={'description'} content={'my panchanok'}/>
             </Head>
             <Header />
-            <Component {...pageProps} />
+            <AnimatePresence exitBeforeEnter>
+                <Component {...pageProps} />
+            </AnimatePresence>
             <style jsx global>{`
               #nprogress .bar {
                 background: #78f6cb !important;

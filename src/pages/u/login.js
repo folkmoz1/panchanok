@@ -4,6 +4,7 @@ import Image from 'next/image'
 import {useAuth} from "../../context/AuthContext";
 import withoutAuth from "../../hocs/withoutAuth";
 import NProgress from 'nprogress'
+import { motion } from "framer-motion";
 
 NProgress.configure({
     showSpinner: false,
@@ -61,8 +62,8 @@ export default withoutAuth( function Login() {
                 <div className="w-full h-full flex justify-end">
                     <div className="w-full px-4 d-none sm:w-2/3 md:ml-14 md:mr12 md:block">
                         <Image
-                            src={'/images/svg/svg--login.svg'}
-                            width={600}height={700}
+                            src={'/images/svg/svg--login-2.svg'}
+                            width={500}height={600}
                             objectFit={"contain"}
                         />
                     </div>
