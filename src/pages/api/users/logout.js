@@ -14,7 +14,7 @@ export default async (req, res) => {
 
     if (method === 'POST') {
         try {
-            const token = cookie.split('=')[1]
+            const token = Cookie.get('tr--')
 
             const { sub, email, version } = verifyRefreshToken(token)
 
@@ -34,6 +34,7 @@ export default async (req, res) => {
             res.status(200).json({success: true})
 
         } catch (e) {
+            console.log(e.message)
             res.status(401)
             res.end()
         }

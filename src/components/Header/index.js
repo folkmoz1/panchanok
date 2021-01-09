@@ -1,31 +1,21 @@
 import Link from "next/link";
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {Squeeze as Hamburger} from 'hamburger-react'
 import {useAuth} from "../../context/AuthContext";
 import {useRouter} from "next/router";
 import Image from 'next/image'
+import useResize from "../../hooks/useResize";
 
 export default function Header() {
     const { asPath } = useRouter()
     const [isOpen, setIsOpen] = useState(false)
-    const [isMobile, setIsMobile] = useState(false)
+    const [loading, setLoading] = useState(false)
 
+
+    const { isMobile } = useResize({isOpen, setIsOpen})
     const {isLoggedIn, handleLogout, me} = useAuth()
 
-    useEffect(() => {
-        setIsMobile(window.innerWidth < 768)
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 768) {
-                setIsMobile(false)
 
-                if (!isOpen) {
-                    setIsOpen(false)
-                }
-            } else {
-                setIsMobile(true)
-            }
-        })
-    }, [])
 
     return (
         <>
@@ -65,7 +55,7 @@ export default function Header() {
                             }
 
                             {
-                                isLoggedIn ? (
+                                isLoggedIn && me ? (
                                     <>
                                         <li className={'cursor-default my-3 mx-2 md:my-0 md:cursor-pointer'}
                                             onClick={() => setIsOpen(false)}>
@@ -91,6 +81,18 @@ export default function Header() {
                                                 objectFit={"cover"}
                                             />
                                         </div>
+                                        <li className={'mt-8 mb-3 mx-2 md:my-0 '}>
+                                            <a
+                                                onClick={() => {
+                                                    setLoading(true)
+                                                    handleLogout(setLoading, setIsOpen)
+                                                }}
+                                                className={'px-4 text-xl py-2 cursor-default text-red-600 border-red-600 border hover:text-white hover:bg-red-600 md:cursor-pointer'}>
+                                                {
+                                                    loading ? 'กำลังออก..' : 'ออกจากระบบ'
+                                                }
+                                            </a>
+                                        </li>
                                     </>
                                 ) : (
                                         asPath !== '/u/login' ? (
@@ -177,11 +179,11 @@ export default function Header() {
               
                 nav {
                   height: 100%;
-                  width: ${isOpen ? '250px' : '0'};
+                  width: 250px;
+                  right: ${isOpen ? '0' : '-250px'};
                   position: fixed;
                   z-index: 1999;
                   top: 0;
-                  right: 0;
                   background-color: #fff;
                   overflow: hidden;
                   transition: 0.5s;
@@ -210,7 +212,7 @@ export default function Header() {
                   font-size: 160%;
                   opacity: ${isOpen ? 1 : 0};
                   transition: .3s;
-                  display: inline-block;
+                  display: block;
                 }
 
               }

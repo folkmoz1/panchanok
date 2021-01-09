@@ -17,7 +17,7 @@ export const AuthProvider = ({ children, initialData: {user, loggedIn} }) => {
     const [me, setMe] = useState(user)
     const [isLoggedIn, setIsLoggedIn] = useState(loggedIn)
 
-    const handleLogout = async () => {
+    const handleLogout = async (setLoading, setIsOpen) => {
         try {
             NProgress.start()
             const resp = await fetch('/api/users/logout',{
@@ -31,6 +31,8 @@ export const AuthProvider = ({ children, initialData: {user, loggedIn} }) => {
                 NProgress.done()
                 setMe(null)
                 setIsLoggedIn(false)
+                setLoading(false)
+                setIsOpen(false)
                 Router.push('/u/login')
             }
 
