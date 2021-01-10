@@ -16,6 +16,7 @@ import {AuthProvider} from "../context/AuthContext";
 import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
 import {AnimatePresence} from "framer-motion";
+import axios from "axios";
 
 
 
@@ -104,6 +105,10 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
     }
 
     pageProps.isSsr = !!req
+
+    const posts = await axios.get(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/posts`)
+
+    pageProps.posts = posts.data?.data
 
     return { pageProps, initialProps : {user, loggedIn}}
 }
