@@ -2,7 +2,7 @@ import dbConnect from "../../../../utils/dbConnect";
 import bcrypt from 'bcrypt'
 import Cookies from 'cookies'
 import User from "../../../../models/User";
-import { serialize } from 'cookie'
+import { getUserJSON } from "../../../../utils/Authenticate";
 import jwt from 'jsonwebtoken'
 
 
@@ -44,18 +44,10 @@ export default async (req, res) => {
                 maxAge: 3600,
                 path: '/'
             })
-            const userJSON = {
-                id: user?._id,
-                username: user?.username,
-                email: user?.email,
-                createdAt: user?.createdAt,
-                firstName: user?.firstName,
-                lastName: user?.lastName,
-                image: user?.image,
-                emailVerified: user?.emailVerified
-            }
 
-            res.status(200).json({success: true, userJSON})
+
+
+            res.status(200).json({success: true, user: getUserJSON(user)})
 
         } catch (err) {
             res.status(401).json({success: false, message: err.message})

@@ -177,6 +177,58 @@ export default function Header() {
                 </div>
             </header>
             {
+                isMobile &&
+                <nav>
+                    <ul className={'flex items-center flex-col py-6 md:py-0 md:flex-row'}>
+                        {
+                            isMobile &&
+                            <span className={'--outer'}>
+                                   <Hamburger
+                                       toggled={isOpen}
+                                       toggle={() => setIsOpen(!isOpen)}
+                                       size={25}
+                                       rounded
+                                   />
+                                </span>
+                        }
+
+                        {
+                            isLoggedIn && me ? (
+                                <>
+                                    <div
+                                        aria-describedby={id}
+                                        className={'avatar'} onClick={avatarClick}>
+                                        <Image
+                                            src={me.image}
+                                            width={35}
+                                            height={35}
+                                            objectFit={"cover"}
+                                            alt={me.firstName + ' ' + me.lastName}
+                                            loading={"eager"}
+                                        />
+                                    </div>
+                                    {
+                                        isMobile &&
+                                        <>
+                                            <WithAuthLink
+                                                setIsOpen={setIsOpen}
+                                                loading={loading}
+                                                setLoading={setLoading}
+                                                handleLogout={handleLogout}
+                                                setAnchorEl={setAnchorEl}
+                                                avatarClick={avatarClick}
+                                            />
+                                        </>
+                                    }
+                                </>
+                            ) : (
+                                <WithoutAuthLink  setIsOpen={setIsOpen}/>
+                            )
+                        }
+                    </ul>
+                </nav>
+            }
+            {
                 me &&
                 <Popover
                     id={id}
@@ -221,6 +273,7 @@ export default function Header() {
 
               header {
                 width: 100%;
+                z-index: 1560;
               }
     
               .modal {
@@ -235,17 +288,19 @@ export default function Header() {
                 position: fixed;
                 inset: 0;
                 background-color: rgba(0, 0, 0, .4);
-                z-index: 1;
+                z-index: 1666;
                 user-select: none;
               }
 
               #__next {
+                //padding-top: 70px;
                 width: 100%;
                 height: 100%;
-                position: relative;
+                position: absolute;
                 left: ${isOpen ? `-250px` : '0'};
                 transition: .5s;
                 overflow-x: hidden;
+                ${isOpen ? `overflow-y: hidden;` : ''}
               }
 
               header > div {

@@ -11,12 +11,10 @@ import Head from "next/head";
 import { NProgress } from '../../utils/NProgress'
 import Cookies from 'cookies'
 import fetch from "isomorphic-unfetch";
-import App from "next/app";
 import {AuthProvider} from "../context/AuthContext";
 import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
 import {AnimatePresence} from "framer-motion";
-import axios from "axios";
 
 
 
@@ -41,10 +39,8 @@ const MyApp = ({ Component, pageProps, initialProps}) => {
                 <title>panchanok | Home</title>
                 <meta name={'description'} content={'my panchanok'}/>
             </Head>
-            <Header />
-            <AnimatePresence exitBeforeEnter>
-                <Component {...pageProps} />
-            </AnimatePresence>
+             <Header />
+            <Component {...pageProps} />
             <style jsx global>{`
               #nprogress .bar {
                 background: #78f6cb !important;
@@ -102,9 +98,9 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
 
     if (Component.getInitialProps) {
         pageProps = await Component.getInitialProps({...ctx, isSsr: !!req})
+        pageProps.isSsr = !!req
     }
 
-    pageProps.isSsr = !!req
 
     return { pageProps, initialProps : {user, loggedIn}}
 }

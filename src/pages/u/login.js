@@ -45,8 +45,8 @@ export default withoutAuth( function Login() {
 
             if (resp.status === 200) {
 
-                const { userJSON } = await resp.json()
-                setMe(userJSON)
+                const { user } = await resp.json()
+                setMe(user)
                 NProgress.done()
                 router.push('/')
             }

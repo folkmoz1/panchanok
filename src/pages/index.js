@@ -2,6 +2,7 @@ import Card__Component from "../components/Card";
 import useSWR from "swr";
 import Link from "next/link";
 import axios from "axios";
+import { useState } from "react";
 
 
 const fetcher = (url) =>
@@ -11,11 +12,16 @@ const fetcher = (url) =>
 
 
 const Home = ({ posts: initialData, isSsr }) => {
+    const [currentPost, setCurrentPost] = useState(null)
 
     const { data: posts, error } = useSWR(!isSsr ? '/api/posts' : null, fetcher, {
         revalidateOnMount: true,
         initialData
     })
+
+    const getPost = postId => {
+        setCurrentPost(posts.filter(post => post._id === postId))
+    }
 
 
     if (!posts) {

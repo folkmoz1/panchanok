@@ -26,7 +26,8 @@ export const userSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        type: String
+        type: String,
+        default: '/images/svg/svg--avatar.svg'
     },
     emailVerified: {
         type: Boolean,

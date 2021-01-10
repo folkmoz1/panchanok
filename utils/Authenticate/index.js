@@ -19,6 +19,20 @@ export const verifyRefreshToken = token => {
     return verify(token, TOKEN_SECRET)
 }
 
+export const getUserJSON = user => {
+    const userJSON = {
+        id: user?._id,
+        username: user?.username,
+        email: user?.email,
+        createdAt: user?.createdAt,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        image: user?.image,
+        emailVerified: user?.emailVerified
+    }
+
+    return userJSON
+}
 
 export const checkTokenVersion = async (id, tokenVersion) => {
     const user = await User.findById(id)
