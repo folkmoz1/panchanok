@@ -42,6 +42,11 @@ const MyApp = ({ Component, pageProps, initialProps}) => {
              <Header />
             <Component {...pageProps} />
             <style jsx global>{`
+              body {
+                height: 100vh;
+                width: 100%;
+              }
+
               #nprogress .bar {
                 background: #78f6cb !important;
               }
