@@ -93,7 +93,7 @@ const Home = ({ posts }) => {
 Home.getInitialProps = async ({ req, res, isSsr }) => {
 
     try {
-        const resp = await axios.get('http://localhost:3000/api/posts')
+        const resp = await axios.get(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/posts`)
 
         const { data } = resp.data
 
