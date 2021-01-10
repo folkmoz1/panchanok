@@ -58,7 +58,7 @@ export default withoutAuth( function Login() {
 
     return (
         <>
-            <div className={' max-w-screen-2xl mx-auto md:pt-20'}>
+            <div style={{height: 'calc(100vh - 70px)'}} className={'w-full sm:max-w-screen-2xl mx-auto md:pt-20'}>
                 <div className="w-full h-full flex justify-end">
                     <div className="w-full px-4 d-none sm:w-2/3 md:ml-14 md:mr12 md:block">
                         <Image
@@ -67,9 +67,9 @@ export default withoutAuth( function Login() {
                             objectFit={"contain"}
                         />
                     </div>
-                    <div className="w-11/12 mt-32 mx-auto max-w-xl md:mt-0 md:w-2/3">
-                        <div className={'w-full sm:w-5/6 flex justify-center md:justify-end'}>
-                            <form onSubmit={submitForm} className={'bg-white flex flex-col w-full rounded-2xl shadow-md md:mt-14 --form'}>
+                    <div className="w-full  sm:mx-auto max-w-xl md:w-2/3">
+                        <div className={'w-full h-full sm:w-5/6 flex justify-center md:justify-end sm:h-auto'}>
+                            <form onSubmit={submitForm} className={'bg-white h-full  flex flex-col w-full sm:rounded-2xl shadow-md md:mt-14 --form'}>
                                 <h1 className={'uppercase'}>sign in</h1>
                                 <div className={'flex flex-col my-3 '}>
                                     <label
