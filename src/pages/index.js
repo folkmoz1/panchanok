@@ -1,9 +1,7 @@
-/*import dbConnect from "../../utils/dbConnenct";
-import Post from "../../models/Post";*/
 import Card__Component from "../components/Card";
 import useSWR from "swr";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import axios from "axios";
 
 
 const fetcher = (url) =>
@@ -12,11 +10,11 @@ const fetcher = (url) =>
         .then((json) => json.data)
 
 
-const Home = () => {
+const Home = ({ posts }) => {
 
-    const { data: posts, error } = useSWR('/api/posts', fetcher, {
+    /*const { data: posts, error } = useSWR('/api/posts', fetcher, {
         revalidateOnMount: true
-    })
+    })*/
 
 
     if (!posts) {
@@ -70,9 +68,9 @@ const Home = () => {
         )
     }
 
-    if (error) {
+/*    if (error) {
         return <p>error, Try again.</p>
-    }
+    }*/
 
     return (
         <>
@@ -92,7 +90,19 @@ const Home = () => {
         </>
     )
 }
+Home.getInitialProps = async ({ req, res, isSsr }) => {
 
+    try {
+        const resp = await axios.get('http://localhost:3000/api/posts')
+
+        const { data } = resp.data
+
+        return  { posts: data }
+    } catch (e) {
+        console.log(e)
+        return { posts: null }
+    }
+}
 
 
 export default Home

@@ -53,10 +53,10 @@ const MyApp = ({ Component, pageProps, initialProps}) => {
     )
 }
 
-MyApp.getInitialProps = async context => {
-    const { req, res } = context.ctx
+MyApp.getInitialProps = async ({ ctx, Component, router }) => {
+    const { req, res } = ctx
 
-    let user, loggedIn
+    let user, loggedIn, pageProps = {}
 
     if (req) {
 
@@ -98,9 +98,14 @@ MyApp.getInitialProps = async context => {
 
     }
 
-    const pageProps = await App.getInitialProps(context)
 
-    return { ...pageProps,initialProps : {user, loggedIn}}
+    if (Component.getInitialProps) {
+        pageProps = await Component.getInitialProps({...ctx, isSsr: !!req})
+    }
+
+    pageProps.isSsr = !!req
+
+    return { pageProps, initialProps : {user, loggedIn}}
 }
 
 export default MyApp
