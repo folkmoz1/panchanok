@@ -10,9 +10,9 @@ const fetcher = (url) =>
         .then((json) => json.data)
 
 
-const Home = ({ posts, isSsr }) => {
+const Home = ({ posts: initialData, isSsr }) => {
 
-   /* const { data: posts, error } = useSWR(!isSsr ? '/api/posts' : null, fetcher, {
+    const { data: posts, error } = useSWR(!isSsr ? '/api/posts' : null, fetcher, {
         revalidateOnMount: true,
         initialData
     })
@@ -30,7 +30,7 @@ const Home = ({ posts, isSsr }) => {
 
     if (error) {
         return <p>error, Try again.</p>
-    }*/
+    }
 
     return (
         <>
@@ -50,7 +50,7 @@ const Home = ({ posts, isSsr }) => {
         </>
     )
 }
-/*Home.getInitialProps = async ({ req, res, isSsr }) => {
+Home.getInitialProps = async ({ req, res, isSsr }) => {
 
     if (isSsr) {
         try {
@@ -65,7 +65,7 @@ const Home = ({ posts, isSsr }) => {
     }
 
     return { }
-}*/
+}
 
 
 export default Home

@@ -106,10 +106,6 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
 
     pageProps.isSsr = !!req
 
-    const posts = await axios.get(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/posts`)
-
-    pageProps.posts = posts.data?.data
-
     return { pageProps, initialProps : {user, loggedIn}}
 }
 
