@@ -10,67 +10,27 @@ const fetcher = (url) =>
         .then((json) => json.data)
 
 
-const Home = ({ posts }) => {
+const Home = ({ posts: initialData, isSsr }) => {
 
-    /*const { data: posts, error } = useSWR('/api/posts', fetcher, {
-        revalidateOnMount: true
-    })*/
+    const { data: posts, error } = useSWR(!isSsr ? '/api/posts' : null, fetcher, {
+        revalidateOnMount: true,
+        initialData
+    })
 
 
     if (!posts) {
         return (
             <>
                 <div className={'flex flex-col mt-16 justify-center items-center'}>
-                    <svg version="1.1" id="L2" xmlns="http://www.w3.org/2000/svg"
-                         xmlnsXlink="http://www.w3.org/1999/xlink"
-                         x="0px" y="0px" viewBox="0 0 100 100" enableBackground="new 0 0 100 100" xmlSpace="preserve">
-                        <circle fill="none" stroke="#cb3837" strokeWidth="4" strokeMiterlimit="10" cx="50" cy="50"
-                                r="48"/>
-                        <line fill="none" strokeLinecap="round" stroke="#cb3837" strokeWidth="4" strokeMiterlimit="10"
-                              x1="50" y1="50" x2="85" y2="50.5">
-                            <animateTransform
-                                attributeName="transform"
-                                dur="2s"
-                                type="rotate"
-                                from="0 50 50"
-                                to="360 50 50"
-                                repeatCount="indefinite"/>
-                        </line>
-                        <line fill="none" strokeLinecap="round" stroke="#cb3837" strokeWidth="4" strokeMiterlimit="10"
-                              x1="50" y1="50" x2="49.5" y2="74">
-                            <animateTransform
-                                attributeName="transform"
-                                dur="15s"
-                                type="rotate"
-                                from="0 50 50"
-                                to="360 50 50"
-                                repeatCount="indefinite"/>
-                        </line>
-                    </svg>
-                    <h3 className={'animate-bounce'}>Loading...</h3>
+                    <img src="/images/svg/loading--text.svg" width={170} height={150} alt="loading animation"/>
                 </div>
-                <style jsx global>{`
-                  svg {
-                    width: 100px;
-                    height: 100px;
-                    margin: 20px;
-                    display: inline-block;
-                  }
-                  
-                  h3 {
-                    font-size: 160%;
-                    font-weight: bold;
-                    letter-spacing: 5px;
-                    margin-left: 2rem;
-                  }
-                `}</style>
             </>
         )
     }
 
-/*    if (error) {
+    if (error) {
         return <p>error, Try again.</p>
-    }*/
+    }
 
     return (
         <>
@@ -92,16 +52,19 @@ const Home = ({ posts }) => {
 }
 Home.getInitialProps = async ({ req, res, isSsr }) => {
 
-    try {
-        const resp = await axios.get(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/posts`)
+    if (isSsr) {
+        try {
+            const resp = await axios.get(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/posts`)
 
-        const { data } = resp.data
+            const { data } = resp.data
 
-        return  { posts: data }
-    } catch (e) {
-        console.log(e)
-        return { posts: null }
+            return  { posts: data }
+        } catch (e) {
+            return { posts: null }
+        }
     }
+
+    return { }
 }
 
 
