@@ -37,6 +37,8 @@ export default async (req, res) => {
                         fullName: `${user.firstName} ${user.lastName}`,
                         profile: user.image
                     }
+                    
+                    req.body.createdAt = Date.now()
 
                     const newPost = await Post.create(req.body)
 
