@@ -1,9 +1,13 @@
 import dbConnect from "../../../../utils/dbConnect";
 import Post from "../../../../models/Post";
+import Cookies from 'cookies'
+import jwt from 'jsonwebtoken'
+import {checkTokenVersion} from "../../../../utils/Authenticate";
 
 export default async (req, res) => {
     const { method } = req
     await dbConnect()
+    const cookies = new Cookies(req, res)
 
     switch (method) {
         case 'GET':
@@ -17,22 +21,37 @@ export default async (req, res) => {
             break
         case 'POST':
             try {
+                const token = cookies.get('tr--')
 
-                const { author, desc, images, title } = JSON.parse(req.body)
+                jwt.verify(token, process.env.TOKEN_SECRET, {}, async (err, result) => {
+                    if (err) throw new Error()
 
-                const newPost = await Post.create({
-                    author,
-                    title,
-                    desc,
-                    images,
-                    createdAt: Date.now()
+                    const { sub, email, version } = result
+
+                    const { user, valid } = await checkTokenVersion(sub, version)
+
+                    if (!valid) throw new Error()
+
+                    req.body.author = {
+                        id: user._id.toString(),
+                        fullName: `${user.firstName} ${user.lastName}`,
+                        profile: user.image
+                    }
+
+                    const newPost = await Post.create(req.body)
+
+                    await user.updateOne({
+                        posts: [...user.posts, newPost]
+                    },{
+                        new: true,
+                        strict: false,
+                    })
+
+                    res.status(201).json({success: true})
                 })
 
-                await newPost.save()
-
-                res.status(201).json({success: true})
             } catch (e) {
-                res.status(400).json({success: false})
+                res.status(401).json({success: false})
             }
             break
         default:

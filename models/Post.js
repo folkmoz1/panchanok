@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const PostSchema = new mongoose.Schema({
     author: {
-        type: String,
+        type: Object,
         required: [true, 'author is required.']
     },
     title: {
@@ -16,8 +16,8 @@ const PostSchema = new mongoose.Schema({
     desc: {
         type: String,
     },
-    like_count: {
-        type: Number
+    action: {
+        type: Array
     },
     comment: {
         type: Array,
@@ -26,6 +26,9 @@ const PostSchema = new mongoose.Schema({
     createdAt: {
         type: Number,
     }
+},{
+    strict: false,
+    versionKey: false
 })
 
 

@@ -147,7 +147,7 @@ export default function Register() {
             </div>
             <style jsx global>{`
               body {
-                background-image: linear-gradient(-105deg, #009acc, #363795);
+                background-image: linear-gradient(-105deg,#009acc,#cbfdef);
               }
 
 

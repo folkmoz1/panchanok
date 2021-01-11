@@ -17,6 +17,9 @@ export const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    posts: {
+        type: Array,
+    },
     lastName: {
         type: String,
         required: true
@@ -38,6 +41,9 @@ export const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
+},{
+    strict: false,
+    versionKey: false
 })
 
 export default mongoose.models.User || mongoose.model('User', userSchema)

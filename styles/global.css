@@ -42,27 +42,6 @@ button:disabled {
     stroke-width: 1;
 }
 
-.preview__contain {
-    max-width: 400px;
-    max-height: 500px;
-    position: relative;
-}
-
-.preview__contain:before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0, 0, 0, .2);
-    z-index: 1;
-    opacity: 0;
-}
-
-.preview__contain:hover span, .preview__contain:hover:before {
-    opacity: 1;
-    transition: .2s opacity ease-in-out;
-}
-
-
 
 @tailwind components;
 

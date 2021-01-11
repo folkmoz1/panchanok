@@ -1,7 +1,9 @@
-import {useState, useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import Image from "next/image";
 import NProgress from 'nprogress'
 import Router from 'next/router'
+import axios from "axios";
+import {useAuth} from "../../context/AuthContext";
 
 export const fileToDataUri = (image) => {
     return new Promise((res) => {
@@ -28,17 +30,18 @@ NProgress.configure({
 const Form = () => {
     const contentType = 'application/json'
     const [images, setImages] = useState([])
-    const [previewImage, setPreviewImage] = useState( [])
+    const [previewImage, setPreviewImage] = useState([])
     const [selectPreview, setSelectPreview] = useState(0)
     const [error, setError] = useState('')
     const [data, setData] = useState({
-        author: '',
         desc: '',
         title: ''
     })
     const [uploaded, setUploaded] = useState([])
 
-    const checkValue = images.length === 0 || !data.author || !data.desc || !data.title
+    const {me} = useAuth()
+
+    const checkValue = images.length === 0 || !data.desc || !data.title
 
     const onTextChange = ({target}) => {
         setData(
@@ -122,23 +125,20 @@ const Form = () => {
         const fetcher = async () => {
             try {
                 const dataToJSON = {
-                    author: data.author,
                     desc: data.desc,
                     title: data.title,
                     images: uploaded
                 }
 
-                const resp = await fetch('/api/posts',{
-                    method: 'POST',
-                    body: JSON.stringify(dataToJSON)
-                })
+                const resp = await axios.post('/api/posts', dataToJSON)
 
                 if (resp.status === 201) {
                     NProgress.done()
                     Router.push('/')
                 }
+
             } catch (e) {
-                NProgress.done
+                NProgress.done()
                 setError('อ๊ะ เกิดข้อผิดพลาด ลองใหม่อีกครั้งนะครับ!')
                 console.log(e)
             }
@@ -195,17 +195,20 @@ const Form = () => {
             <div className={'w-4/5 md:w-1/2 flex flex-col items-center h-full md:pt-32 md:pr-4'}>
                 { error && <span className={'w-full p-4 border border-red-300 bg-red-200 text-red-600'} >{error}</span> }
                 <form className={'w-full'} onSubmit={submitForm}>
-                    <div className={'flex flex-col my-3 '}>
-                        <label
-                            htmlFor="author"
-                            className={'mb-2'}
-                        >Your name</label>
-                        <input
-                            onChange={onTextChange}
-                            value={data.author}
-                            name={'author'}
-                            className={` shadow-sm px-4 py-2 rounded bg-gray-50  dark:bg-gray-700 ring-4 ${data.author ? 'ring-green-300' : 'ring-gray-100'} focus:ring-indigo-300`}
-                        />
+                    <div className={'flex items-center my-3 select-none'}>
+                        <div className={'profile--image'}>
+                            <Image
+                                src={me.image}
+                                width={50}
+                                height={50}
+                                alt={`${me.firstName} ${me.lastName}`}
+                                quality={100}
+                                objectFit={"cover"}
+                            />
+                        </div>
+                        <div className="profile--name">
+                            <h1>{`${me.firstName} ${me.lastName}`}</h1>
+                        </div>
                     </div>
                     <div className={'flex flex-col mb-3 mt-5 '}>
                         <label
@@ -259,6 +262,45 @@ const Form = () => {
                     </div>
                 </form>
             </div>
+            <style jsx>{`
+              .profile--image {
+                border-radius: 50%;
+                position: relative;
+                overflow: hidden;
+                width: 50px;
+                height: 50px;
+                margin-right: 2rem;
+              }
+
+              .profile--name {
+                font-size: 160%;
+                font-weight: 600;
+                background: #ebebee;
+                padding: .5rem 1.5rem;
+                border-radius: 9993px;
+                color: #4c4949;
+              }
+
+              .preview__contain {
+                max-width: 400px;
+                max-height: 500px;
+                position: relative;
+              }
+
+              .preview__contain:before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-color: rgba(0, 0, 0, .2);
+                z-index: 1;
+                opacity: 0;
+              }
+
+              .preview__contain:hover span, .preview__contain:hover:before {
+                opacity: 1;
+                transition: .2s opacity ease-in-out;
+              }
+            `}</style>
         </>
     )
 }

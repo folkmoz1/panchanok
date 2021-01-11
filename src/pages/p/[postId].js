@@ -92,7 +92,7 @@ const Post_Page = ({post: initial}) => {
                                     post ? (
                                         <>
                                             <div className={'flex justify-between items-center'}>
-                                                <h1 className={'author'}>{post.author}</h1>
+                                                <h1 className={'author'}>{post.author.fullName}</h1>
                                                 {
                                                     me &&
                                                     <a

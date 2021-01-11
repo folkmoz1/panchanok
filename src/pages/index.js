@@ -2,6 +2,7 @@ import Card__Component from "../components/Card";
 import useSWR from "swr";
 import Link from "next/link";
 import axios from "axios";
+import React from "react";
 import { useState } from "react";
 
 
@@ -9,6 +10,31 @@ const fetcher = (url) =>
     fetch(url)
         .then((res) => res.json())
         .then((json) => json.data)
+
+const MyButton = React.forwardRef(({ onClick, href }, ref) => {
+    return (
+        <a href={href} onClick={onClick} ref={ref}>
+            Click Me
+        </a>
+    )
+})
+
+class MyLink extends React.Component {
+    render () {
+        const { onCustomClick, ...props } = this.props
+        return <a {...props} onClick={this.handleClick} />
+    }
+
+    handleClick = event => {
+        if (this.props.onClick) {
+            this.props.onClick(event)
+        }
+
+        if (this.props.onCustomClick) {
+            this.props.onCustomClick(event)
+        }
+    }
+}
 
 
 const Home = ({ posts: initialData, isSsr }) => {
@@ -44,9 +70,9 @@ const Home = ({ posts: initialData, isSsr }) => {
                 <div className="py-8 h-full flex  items-center flex-col sm:flex-wrap sm:flex-row sm:items-start">
                     {
                         posts.map(post => (
-                            <Link href={`/p/${post._id}`} key={post._id}>
+                            <Link href={`/p/${post._id}`}  key={post._id}>
                                 <a>
-                                    <Card__Component post={post} />
+                                    <Card__Component post={post} key={post._id} />
                                 </a>
                             </Link>
                         ))

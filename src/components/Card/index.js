@@ -102,7 +102,7 @@ const Card__Component = ({ post }) => {
                 <Image src={images[0].url} layout={'fill'} objectFit={'cover'} loading={"eager"} alt={author}/>
                 <h1 className={'title'}>• {dayjs(createdAt).fromNow(true)} ที่ผ่านมา</h1>
                 <div className="content">
-                    <p className={'author'}>{author}</p>
+                    <p className={'author'}>{author.fullName}</p>
                     <p className="title-in"> {title}</p>
                     <div className={'description'}>
                         <label className={'text-gray-700 font-bold'}>description</label>
