@@ -18,7 +18,7 @@ const CommentReply = ({comment}) => {
                     />
                 </div>
                 <div className={'bg-gray-100 py-1 px-2 rounded max-w-full flex-1'}>
-                    <Link href={`/@${fullName}`}>
+                    <Link href={`/@${username}`}>
                         <a className={'hover:underline text-1r font-semibold cursor-default md:cursor-pointer text-hidden'}>
                             <p>
                                 {fullName}

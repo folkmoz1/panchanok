@@ -28,7 +28,7 @@ export const getUserJSON = user => {
         firstName: user?.firstName,
         lastName: user?.lastName,
         image: user?.image,
-        emailVerified: user?.emailVerified
+        posts: user?.posts
     }
 
     return userJSON
