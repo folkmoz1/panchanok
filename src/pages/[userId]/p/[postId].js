@@ -250,7 +250,7 @@ const Post_Page = ({post: initial}) => {
                                             <ul>
                                                 {
                                                     post.comments.map(comment => (
-                                                        <CommentReply key={comment.createdAt} comment={comment} />
+                                                        <CommentReply key={comment.createdAt} comment={comment} me={me} />
                                                     ))
                                                 }
                                             </ul>
