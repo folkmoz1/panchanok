@@ -70,7 +70,7 @@ const Home = ({ posts: initialData, isSsr }) => {
                 <div className="py-8 h-full flex  items-center flex-col sm:flex-wrap sm:flex-row sm:items-start">
                     {
                         posts.map(post => (
-                            <Link href={`/p/${post._id}`}  key={post._id}>
+                            <Link href={`/@${post.author.username}/p/${post._id}`}  key={post._id}>
                                 <a>
                                     <Card__Component post={post} key={post._id} />
                                 </a>

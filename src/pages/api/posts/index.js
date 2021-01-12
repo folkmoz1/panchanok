@@ -34,6 +34,7 @@ export default async (req, res) => {
 
                     req.body.author = {
                         id: user._id.toString(),
+                        username: user.username,
                         fullName: `${user.firstName} ${user.lastName}`,
                         profile: user.image
                     }
@@ -42,8 +43,12 @@ export default async (req, res) => {
 
                     const newPost = await Post.create(req.body)
 
+                    req.body.id = newPost._id.toString()
+
+                    delete req.body.author
+
                     await user.updateOne({
-                        posts: [...user.posts, newPost]
+                        posts: [...user.posts, req.body]
                     },{
                         new: true,
                         strict: false,

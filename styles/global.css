@@ -42,13 +42,29 @@ button:disabled {
     stroke-width: 1;
 }
 
+.avatar--me {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+}
 
 @tailwind components;
 
 @tailwind utilities;
 
+.text-hidden {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .text-1r {
     font-size: 1rem;
+}
+
+.text-xs {
+    font-size: .75rem;
 }
 
 .d-none {

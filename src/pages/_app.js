@@ -39,7 +39,7 @@ const MyApp = ({ Component, pageProps, initialProps}) => {
                 <title>panchanok | Home</title>
                 <meta name={'description'} content={'my panchanok'}/>
             </Head>
-             <Header />
+            <Header />
             <Component {...pageProps} />
             <style jsx global>{`
               body {

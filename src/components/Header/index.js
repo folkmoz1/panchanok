@@ -4,8 +4,10 @@ import {Squeeze as Hamburger} from 'hamburger-react'
 import {useAuth} from "../../context/AuthContext";
 import Image from 'next/image'
 import useResize from "../../hooks/useResize";
-import Popover from '@material-ui/core/Popover'
 import Divider from '@material-ui/core/Divider'
+import CreatePost from "../CreatePost";
+import {useRouter} from "next/router";
+import CustomPopover from "../Popup/Popover";
 
 const WithoutAuthLink = ({ setIsOpen }) => (
     <>
@@ -27,7 +29,8 @@ const WithoutAuthLink = ({ setIsOpen }) => (
     </>
 )
 
-const WithAuthLink = ({ setIsOpen, setLoading, loading, handleLogout, setAnchorEl, avatarClick }) => {
+const WithAuthLink = ({ setIsOpen, setLoading, loading, handleLogout, setAnchorEl, setModalOpen }) => {
+    const { isMobile } = useResize()
 
     return (
         <>
@@ -46,14 +49,24 @@ const WithAuthLink = ({ setIsOpen, setLoading, loading, handleLogout, setAnchorE
             <li
                 className={'my-3 mx-2 md:my-2 md:py-2 md:px-4'}
                 onClick={() => {
+                if (!isMobile) setModalOpen(true)
                 setIsOpen(false)
                 setAnchorEl(null)
             }}>
-                <Link href={'/p/new'}>
-                    <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer md:w-full'}>
-                        สร้างโพสต์
-                    </a>
-                </Link>
+                {
+                    isMobile ?
+                        (
+                            <Link href={'/p/new' } >
+                                <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer md:w-full'}>
+                                    สร้างโพสต์
+                                </a>
+                            </Link>
+                        ) : (
+                            <a className={'px-4 py-2 cursor-default hover:text-yellow-400 md:cursor-pointer md:w-full'}>
+                                สร้างโพสต์
+                            </a>
+                        )
+                }
             </li>
             <Divider variant={"middle"}/>
             <li className={'mt-8 mb-3 mx-2 md:my-2 md:py-2 md:px-4 md:w-full'}>
@@ -76,13 +89,12 @@ export default function Header() {
     const [isOpen, setIsOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
-
+    const [modalOpen, setModalOpen] = useState(false)
 
     const { isMobile } = useResize()
     const {isLoggedIn, handleLogout, me} = useAuth()
+    const { push } = useRouter()
 
-    const open = Boolean(anchorEl)
-    const id = open ? 'avatar-popup' : undefined
 
     const avatarClick = (e) => {
         if (isMobile) {
@@ -95,10 +107,14 @@ export default function Header() {
     }
 
     useEffect(() => {
-        if (!isMobile && isOpen) {
-            setIsOpen(false)
-        } else {
+        if (isMobile) {
             setAnchorEl(null)
+            setModalOpen(false)
+            if (modalOpen) {
+                push('/p/new')
+            }
+        } else {
+            setIsOpen(false)
         }
     },[isMobile])
 
@@ -143,7 +159,7 @@ export default function Header() {
                                 isLoggedIn && me ? (
                                     <>
                                         <div
-                                            aria-describedby={id}
+                                            aria-describedby={'avatar-popup'}
                                             className={'avatar'} onClick={avatarClick}>
                                             <Image
                                                 src={me.image}
@@ -164,6 +180,7 @@ export default function Header() {
                                                     handleLogout={handleLogout}
                                                     setAnchorEl={setAnchorEl}
                                                     avatarClick={avatarClick}
+                                                    setModalOpen={setModalOpen}
                                                 />
                                             </>
                                         }
@@ -196,7 +213,7 @@ export default function Header() {
                             isLoggedIn && me ? (
                                 <>
                                     <div
-                                        aria-describedby={id}
+                                        aria-describedby={'avatar--popup'}
                                         className={'avatar'} onClick={avatarClick}>
                                         <Image
                                             src={me.image}
@@ -217,6 +234,7 @@ export default function Header() {
                                                 handleLogout={handleLogout}
                                                 setAnchorEl={setAnchorEl}
                                                 avatarClick={avatarClick}
+                                                setModalOpen={setModalOpen}
                                             />
                                         </>
                                     }
@@ -230,19 +248,10 @@ export default function Header() {
             }
             {
                 me &&
-                <Popover
-                    id={id}
-                    open={open}
+                <CustomPopover
+                    setAnchorEl={setAnchorEl}
                     anchorEl={anchorEl}
-                    onClose={() => setAnchorEl(null)}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}
+                    nameId={'avatar--popup'}
                 >
                     <ul className={'overflow-hidden'} style={{width: 200}}>
                         <WithAuthLink
@@ -252,13 +261,18 @@ export default function Header() {
                             handleLogout={handleLogout}
                             setAnchorEl={setAnchorEl}
                             avatarClick={avatarClick}
+                            setModalOpen={setModalOpen}
                         />
                     </ul>
-                </Popover>
+                </CustomPopover>
             }
             {
                 isMobile &&
                 <div className={isOpen ? 'modal --active' : 'modal'} onClick={() => setIsOpen(false)}></div>
+            }
+            {
+                modalOpen &&
+                <CreatePost setOpen={setModalOpen} open={modalOpen} />
             }
 
             <style jsx global>{`
@@ -273,7 +287,7 @@ export default function Header() {
 
               header {
                 width: 100%;
-                z-index: 1560;
+                z-index: 1000;
                 position: fixed;
                 top: 0;
               }
