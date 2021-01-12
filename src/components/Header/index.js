@@ -274,6 +274,8 @@ export default function Header() {
               header {
                 width: 100%;
                 z-index: 1560;
+                position: fixed;
+                top: 0;
               }
     
               .modal {
@@ -293,7 +295,7 @@ export default function Header() {
               }
 
               #__next {
-                //padding-top: 70px;
+                padding-top: 70px;
                 width: 100%;
                 height: 100%;
                 position: absolute;

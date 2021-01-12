@@ -54,7 +54,7 @@ export default function Register() {
 
     return (
         <>
-            <div className="flex w-full sm:max-w-screen-sm h-auto justify-center sm:h-auto md:pt-16 mx-auto">
+            <div className="flex w-full sm:max-w-screen-sm h-full justify-center sm:h-auto md:pt-16 mx-auto">
                 <div className="bg-white shadow-md m-0  w-full px-8 pt-6 pb-8 flex flex-col sm:rounded sm:my-2">
                     <div className="-mx-3 md:flex mb-6">
                         <div className="md:w-1/2 px-3 mb-6 md:mb-0">
