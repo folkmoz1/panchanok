@@ -49,6 +49,12 @@ button:disabled {
     border-radius: 50%;
 }
 
+@media (max-width: 768px) {
+    a, button {
+        cursor: default;
+    }
+}
+
 @tailwind components;
 
 @tailwind utilities;
