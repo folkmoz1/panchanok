@@ -249,7 +249,7 @@ export default function Header() {
                                     }
                                 </>
                             ) : (
-                                <WithoutAuthLink  setIsOpen={setIsOpen}/>
+                                <WithoutAuthLink asPath={asPath}  setIsOpen={setIsOpen}/>
                             )
                         }
                     </ul>
