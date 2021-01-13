@@ -10,11 +10,11 @@ import Header from "../components/Header";
 import Head from "next/head";
 import { NProgress } from '../../utils/NProgress'
 import Cookies from 'cookies'
-import fetch from "isomorphic-unfetch";
+import {SWRConfig} from "swr";
 import {AuthProvider} from "../context/AuthContext";
 import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
-import {AnimatePresence} from "framer-motion";
+import axios from "axios";
 
 
 
@@ -34,14 +34,19 @@ const MyApp = ({ Component, pageProps, initialProps}) => {
 
 
     return (
-        <AuthProvider initialData={initialProps}>
-            <Head>
-                <title>panchanok | Home</title>
-                <meta name={'description'} content={'my panchanok'}/>
-            </Head>
-            <Header />
-            <Component {...pageProps} />
-            <style jsx global>{`
+        <SWRConfig
+            value={{
+                fetcher: url => axios.get(url).then(res => res.data.data)
+            }}
+        >
+            <AuthProvider initialData={initialProps}>
+                <Head>
+                    <title>panchanok | Home</title>
+                    <meta name={'description'} content={'my panchanok'}/>
+                </Head>
+                <Header />
+                <Component {...pageProps} />
+                <style jsx global>{`
               body {
                 height: 100vh;
                 width: 100%;
@@ -51,7 +56,8 @@ const MyApp = ({ Component, pageProps, initialProps}) => {
                 background: #78f6cb !important;
               }
             `}</style>
-        </AuthProvider>
+            </AuthProvider>
+        </SWRConfig>
     )
 }
 
@@ -69,14 +75,13 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
 
             const { sub, email } = jwt.verify(token, process.env.TOKEN_SECRET)
 
-            const resp = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/users/${sub}`, {
-                method: 'POST',
+            const resp = await axios.post(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/users/${sub}`, null,{
                 headers: {
                     cookie: token
                 }
             })
 
-            const { userJSON } = await resp.json()
+            const { userJSON } = resp.data
 
             user = userJSON
 

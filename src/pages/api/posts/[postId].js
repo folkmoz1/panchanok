@@ -21,6 +21,8 @@ export default async (req, res) => {
             try {
                 const post = await Post.findById(postId).lean()
 
+                post.comments = post.comments.length
+
                 res.status(200).json({success: true, data: post})
             } catch (e) {
                 res.status(404).json({success: false})

@@ -9,10 +9,13 @@ import CreatePost from "../CreatePost";
 import {useRouter} from "next/router";
 import CustomPopover from "../Popup/Popover";
 
-const WithoutAuthLink = ({ setIsOpen }) => (
+const WithoutAuthLink = ({ setIsOpen, asPath }) => (
     <>
         <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
-            <Link href={'/u/login'}>
+            <Link href={{
+                pathname: '/u/login',
+                query: {redirect: asPath}
+            }} as={'/u/login?r=true'}>
                 <a className={'px-4 py-2 text-1r rounded cursor-default   md:cursor-pointer'}>
                     SIGN IN
                 </a>
@@ -20,7 +23,10 @@ const WithoutAuthLink = ({ setIsOpen }) => (
         </li>
 
         <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
-            <Link href={'/u/register'}>
+            <Link href={{
+                pathname: '/u/register',
+                query: {redirect: asPath}
+            }} as={'/u/register'}>
                 <a className={'px-4 font-medium text-1r py-2 border rounded  border-green-400 text-white bg-green-400 cursor-default md:cursor-pointer'}>
                     SIGN UP
                 </a>
@@ -93,7 +99,7 @@ export default function Header() {
 
     const { isMobile } = useResize()
     const {isLoggedIn, handleLogout, me} = useAuth()
-    const { push } = useRouter()
+    const { push, asPath } = useRouter()
 
 
     const avatarClick = (e) => {
@@ -186,7 +192,10 @@ export default function Header() {
                                         }
                                     </>
                                 ) : (
-                                    <WithoutAuthLink  setIsOpen={setIsOpen}/>
+                                    <WithoutAuthLink
+                                        setIsOpen={setIsOpen}
+                                        asPath={asPath}
+                                    />
                                 )
                             }
                         </ul>

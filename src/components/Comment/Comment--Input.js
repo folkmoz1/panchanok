@@ -26,6 +26,11 @@ const CommentInput = forwardRef(({children, func, me}, ref) => {
                         suppressContentEditableWarning
                         contentEditable
                         ref={ref}
+                        onKeyDown={e => {
+                            if (e.key === 'Enter') {
+                                func()
+                            }
+                        }}
                     />
                 </div>
                 <div className={'ml-2'}>

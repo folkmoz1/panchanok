@@ -13,7 +13,7 @@ export default function withAuth(WrappedComponent, location = '/login') {
       return !useIsAuthenticated();
     },
     serverCondition: function withAuthServerCondition(ctx) {
-      return !ctx.req?.cookies['ta--'];
+      return !ctx.req?.cookies['tr--'];
     }
   });
 }

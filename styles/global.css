@@ -53,6 +53,14 @@ button:disabled {
 
 @tailwind utilities;
 
+.min-h-screen-custom {
+    min-height: calc(100vh - 70px);
+}
+
+.flex-0 {
+    flex: 0 0 auto;
+}
+
 .text-hidden {
     overflow: hidden;
     text-overflow: ellipsis;

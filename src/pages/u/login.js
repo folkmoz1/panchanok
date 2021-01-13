@@ -4,7 +4,6 @@ import Image from 'next/image'
 import {useAuth} from "../../context/AuthContext";
 import withoutAuth from "../../hocs/withoutAuth";
 import NProgress from 'nprogress'
-import { motion } from "framer-motion";
 
 NProgress.configure({
     showSpinner: false,
@@ -13,7 +12,7 @@ NProgress.configure({
 })
 
 export default withoutAuth( function Login() {
-    const router = useRouter()
+    const { replace, query: {redirect}, pathname} = useRouter()
 
     const { setMe } = useAuth()
 
@@ -48,7 +47,7 @@ export default withoutAuth( function Login() {
                 const { user } = await resp.json()
                 setMe(user)
                 NProgress.done()
-                router.push('/')
+                replace(redirect ? redirect : '/')
             }
 
         } catch (e) {
@@ -112,7 +111,7 @@ export default withoutAuth( function Login() {
             </div>
             <style jsx global>{`
               body {
-                ${router.asPath === '/u/login' &&
+                ${pathname === '/u/login'   &&
                 `background-image: radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%)
                  `}
               }

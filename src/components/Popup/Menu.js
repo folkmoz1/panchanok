@@ -9,11 +9,12 @@ const CustomMenu = ({
 }) => {
 
     const open = Boolean(anchorEl)
+    const id = open ? nameId : undefined
 
     return (
         <>
             <Menu
-                id={nameId}
+                id={id}
                 onClose={() => setAnchorEl(null)}
                 open={open}
                 keepMounted

@@ -6,41 +6,10 @@ import React from "react";
 import { useState } from "react";
 
 
-const fetcher = (url) =>
-    fetch(url)
-        .then((res) => res.json())
-        .then((json) => json.data)
-
-const MyButton = React.forwardRef(({ onClick, href }, ref) => {
-    return (
-        <a href={href} onClick={onClick} ref={ref}>
-            Click Me
-        </a>
-    )
-})
-
-class MyLink extends React.Component {
-    render () {
-        const { onCustomClick, ...props } = this.props
-        return <a {...props} onClick={this.handleClick} />
-    }
-
-    handleClick = event => {
-        if (this.props.onClick) {
-            this.props.onClick(event)
-        }
-
-        if (this.props.onCustomClick) {
-            this.props.onCustomClick(event)
-        }
-    }
-}
-
-
 const Home = ({ posts: initialData, isSsr }) => {
     const [currentPost, setCurrentPost] = useState(null)
 
-    const { data: posts, error } = useSWR(!isSsr ? '/api/posts' : null, fetcher, {
+    const { data: posts, error } = useSWR(!isSsr ? '/api/posts' : null, {
         revalidateOnMount: true,
         initialData
     })
