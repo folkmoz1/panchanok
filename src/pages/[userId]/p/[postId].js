@@ -184,7 +184,7 @@ const Post_Page = ({post: initial}) => {
                             }
                         </Slider>
                     </div>
-                    <div className="w-full max-w-md">
+                    <div className="w-full md:max-w-md">
                         <div className="px-4 pb-4">
                             <div className={'content'}>
                                 {
