@@ -17,14 +17,7 @@ import Comment from "../../../components/Comment";
 import CommentInput from "../../../components/Comment/Comment--Input";
 import Actions from "../../../components/Actions";
 
-const settings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false
-};
+
 
 
 const Post_Page = ({post: initial}) => {
@@ -91,7 +84,8 @@ const Post_Page = ({post: initial}) => {
 
 
                 await axios.post(`/api/posts/${postId}/comments`, {
-                    content: text
+                    content: text,
+                    createdAt: Date.now()
                 })
             }
         } catch (e) {
@@ -149,6 +143,21 @@ const Post_Page = ({post: initial}) => {
     }
 
 
+    const settings = {
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+        fade: true,
+        customPaging: i => post.images.length > 1 && (
+            <a>
+                <Image src={post.images[i].url} alt={'dots slide'} width={50} height={50} objectFit={"cover"} />
+            </a>
+        )
+    };
+
     return (
         <>
             <div className={'pb-20 md:p-0'}>
@@ -162,8 +171,8 @@ const Post_Page = ({post: initial}) => {
                                             <div className={'relative p-2 slide  flex justify-center md:p-0'}>
                                                 <Image
                                                     src={i.url}
-                                                    width={700}
-                                                    height={700}
+                                                    width={600}
+                                                    height={600}
                                                     objectFit={"contain"}
                                                     alt={post.title}
                                                     quality={100}
@@ -375,19 +384,25 @@ const Post_Page = ({post: initial}) => {
                 height: 500px;
                 width: 600px;
               }
-
-              .slick-dots li:hover button:before {
-                color: rgb(159, 8, 8) !important;
-                transform: scale(1.1);
-                transition: 0.2s all;
+              
+              .slick-dots {
+                bottom: -70px;
               }
+              
+              .slick-dots li {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                overflow: hidden;
+              }
+              
 
               .slick-active button:before {
                 color: #ff0100 !important;
               }
 
-              .slick-dots li:not(.slick-active) button:before {
-                color: rgb(255, 255, 255) !important;
+              .slick-dots li:not(.slick-active) {
+                filter: grayscale(1);
               }
 
               .content {

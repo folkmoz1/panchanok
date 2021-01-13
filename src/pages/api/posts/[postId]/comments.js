@@ -27,7 +27,7 @@ export default async (req, res) => {
             break
         case 'POST':
             try {
-                const { content } = req.body
+                const { content, createdAt } = req.body
                 jwt.verify(token, process.env.TOKEN_SECRET, {}, async (err, result) => {
                     if (err) throw new Error()
 
@@ -46,7 +46,7 @@ export default async (req, res) => {
                         fullName: `${user.firstName} ${user.lastName}`,
                         username: user.username,
                         content,
-                        createdAt: Date.now(),
+                        createdAt,
                         profile: user.image
                     }
 
