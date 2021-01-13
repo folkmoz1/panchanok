@@ -2,7 +2,7 @@ import Slider from 'react-slick'
 import Image from "next/image";
 import {dayjs} from '../../../../utils/dayjs'
 import useSWR, {mutate} from "swr";
-import Router, {useRouter} from "next/router";
+import {useRouter} from "next/router";
 import Skeleton from "react-loading-skeleton";
 import {useAuth} from "../../../context/AuthContext";
 import {NProgress} from '../../../../utils/NProgress'
@@ -33,7 +33,7 @@ const Post_Page = ({post: initial}) => {
 
     const inputRef = createRef()
 
-    const {query: {postId}, replace} = useRouter()
+    const {query: {postId}, replace, push, asPath} = useRouter()
     const {me} = useAuth()
     const {isMobile} = useResize()
 
@@ -104,6 +104,13 @@ const Post_Page = ({post: initial}) => {
     }
 
     const addActions = async (data, liked) => {
+        if (!me) {
+            push({
+                pathname: '/u/login',
+                query: {redirect: asPath}
+            }, '/u/login?r=true')
+        }
+
         try {
             if (!liked) {
                 await axios.post(`/api/posts/${postId}/actions`)
