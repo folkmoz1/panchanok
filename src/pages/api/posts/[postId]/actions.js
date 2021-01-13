@@ -39,15 +39,26 @@ export default async (req, res) => {
 
                     const { actions } = post
 
-                    const data = {
-                        owner: user._id.toString(),
-                        fullName: `${user.firstName} ${user.lastName}`,
-                        username: user.username,
-                        profile: user.image
+                    const checked = actions.map(action => action.owner).includes(sub)
+
+                    let data;
+
+                    if (checked) {
+
+                        data = actions.filter(action => action.owner !== sub)
+
+
+                    } else {
+                        data = {
+                            owner: user._id.toString(),
+                            fullName: `${user.firstName} ${user.lastName}`,
+                            username: user.username,
+                            profile: user.image
+                        }
                     }
 
                     await post.updateOne({
-                        actions: [...actions, data]
+                        actions: checked ? data : [...actions, data]
                     },{
                         new: true,
                         strict: false,

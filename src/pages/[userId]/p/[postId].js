@@ -119,9 +119,6 @@ const Post_Page = ({post: initial}) => {
                     ...post,
                     actions: post.actions + 1
                 }, false)
-
-                await axios.post(`/api/posts/${postId}/actions`)
-
             } else {
                 const newData = data.filter(i => i.owner !== me.id)
 
@@ -132,9 +129,9 @@ const Post_Page = ({post: initial}) => {
                     ...post,
                     actions: post.actions - 1
                 }, false)
-
-                await axios.put(`/api/posts/${postId}/actions`)
             }
+
+            await axios.post(`/api/posts/${postId}/actions`)
 
 
         } catch (e) {
