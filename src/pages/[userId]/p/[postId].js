@@ -80,17 +80,17 @@ const Post_Page = ({post: initial}) => {
                         content: text,
                         profile: me.image
                     }
-                ])
+                ], false)
 
                 mutate(`/api/posts/${postId}`,{
                     ...post,
                     comments: post.comments + 1
-                })
+                }, false)
 
                 setTimeout(() => {
                     inputEl.innerHTML = ''
                 },100)
-                
+
 
                 await axios.post(`/api/posts/${postId}/comments`, {
                     content: text
@@ -126,7 +126,7 @@ const Post_Page = ({post: initial}) => {
                 mutate(`/api/posts/${postId}`,{
                     ...post,
                     actions: post.actions + 1
-                })
+                }, false)
 
                 await axios.post(`/api/posts/${postId}/actions`)
 
@@ -139,7 +139,7 @@ const Post_Page = ({post: initial}) => {
                 mutate(`/api/posts/${postId}`,{
                     ...post,
                     actions: post.actions - 1
-                })
+                }, false)
 
                 await axios.put(`/api/posts/${postId}/actions`)
             }
