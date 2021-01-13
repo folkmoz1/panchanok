@@ -2,6 +2,7 @@ import Router from "next/router";
 import useSWR from "swr";
 import {useEffect, useState} from "react";
 import Skeleton from "react-loading-skeleton";
+import Image from "next/image";
 
 const Actions = ({me, inputRef, addActions, postId}) => {
     const [liked, setLiked] = useState(false)
@@ -27,8 +28,8 @@ const Actions = ({me, inputRef, addActions, postId}) => {
                         onClick={() => addActions(actions, liked)}
                         className={`flex items-center py-2 px-4 rounded-2xl ${liked ? 'bg-red-200' : 'bg-gray-100 hover:bg-gray-200'}`}
                     >
-                        <span className={'flex-0 mr-4'}>
-                            <img
+                        <span className={'flex-0 mr-4 icon'}>
+                            <Image
                                 src={
                                     liked ? (
                                         `/images/svg/svg--liked.svg`
@@ -36,7 +37,8 @@ const Actions = ({me, inputRef, addActions, postId}) => {
                                 }
                                 width={18}
                                 height={18}
-                                alt="unlike icon"/>
+                                alt="actions icon"
+                            />
                         </span>
                         <span className={`flex-1 ${liked && 'text-red-600'}`}>
                             {liked ? 'Liked' : 'Like'}
@@ -75,6 +77,12 @@ const Actions = ({me, inputRef, addActions, postId}) => {
                     </button>
                 </div>
             </div>
+            <style jsx>{`
+              .icon {
+                width: 18px;
+                height: 18px;
+              }
+            `}</style>
         </>
     )
 }

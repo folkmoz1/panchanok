@@ -30,7 +30,6 @@ NProgress.configure({
 })
 
 const Form = ({ setOpen, setLoading, loading }) => {
-    const { asPath } = useRouter()
     const [images, setImages] = useState([])
     const [previewImage, setPreviewImage] = useState([])
     const [selectPreview, setSelectPreview] = useState(0)
@@ -220,8 +219,9 @@ const Form = ({ setOpen, setLoading, loading }) => {
                                 <Image
                                     src={img.src}
                                     width={100}
-                                    height={100
-                                    } objectFit={"cover"}
+                                    height={100}
+                                    objectFit={"cover"}
+                                    alt={'preview image'}
                                 />
                             </span>
                             ))
