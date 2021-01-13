@@ -70,19 +70,15 @@ const Post_Page = ({post: initial}) => {
             if (inputEl.innerText.trim() !== '') {
                 const text = inputEl.innerText
                 while (inputEl.firstChild) inputEl.removeChild(inputEl.firstChild)
-                const resp = await axios.post(`/api/posts/${postId}/comments`, {
-                    content: text
-                })
-
                 mutate(`/api/posts/${postId}/comments`, [
                     ...comments,
                     {
-                       owner: me.id,
-                       fullName: `${me.firstName} ${me.lastName}`,
-                       username: me.username,
-                       createdAt: Date.now(),
-                       content: text,
-                       profile: me.image
+                        owner: me.id,
+                        fullName: `${me.firstName} ${me.lastName}`,
+                        username: me.username,
+                        createdAt: Date.now(),
+                        content: text,
+                        profile: me.image
                     }
                 ])
 
@@ -91,12 +87,14 @@ const Post_Page = ({post: initial}) => {
                     comments: post.comments + 1
                 })
 
-                if (resp?.status === 200) {
-                    setTimeout(() => {
-                        inputEl.innerHTML = ''
-                    },100)
-                }
+                setTimeout(() => {
+                    inputEl.innerHTML = ''
+                },100)
+                
 
+                await axios.post(`/api/posts/${postId}/comments`, {
+                    content: text
+                })
             }
         } catch (e) {
             console.log(e)
@@ -109,14 +107,12 @@ const Post_Page = ({post: initial}) => {
                 pathname: '/u/login',
                 query: {redirect: asPath}
             }, '/u/login?r=true')
-            
+
             return
         }
 
         try {
             if (!liked) {
-                await axios.post(`/api/posts/${postId}/actions`)
-
                 mutate(`/api/posts/${postId}/actions`, [
                     ...data,
                     {
@@ -132,9 +128,9 @@ const Post_Page = ({post: initial}) => {
                     actions: post.actions + 1
                 })
 
-            } else {
-                await axios.put(`/api/posts/${postId}/actions`)
+                await axios.post(`/api/posts/${postId}/actions`)
 
+            } else {
                 const newData = data.filter(i => i.owner !== me.id)
 
                 mutate(`/api/posts/${postId}/actions`,
@@ -144,6 +140,8 @@ const Post_Page = ({post: initial}) => {
                     ...post,
                     actions: post.actions - 1
                 })
+
+                await axios.put(`/api/posts/${postId}/actions`)
             }
 
 
