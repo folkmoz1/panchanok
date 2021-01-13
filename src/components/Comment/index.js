@@ -204,7 +204,7 @@ const Comment = ({postId, me, setComments}) => {
         <>
             {
                 me &&
-                <hr className={'my-3'}/>
+                <hr className={'my-3 d-none md:block'}/>
             }
             <div>
                 <ul>

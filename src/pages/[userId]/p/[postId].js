@@ -107,8 +107,8 @@ const Post_Page = ({post: initial}) => {
     return (
         <>
             <div className={'max-w-screen-xl pb-20 md:p-0'}>
-                <div className="flex flex-col gap-8 pt-8 w-full md:pt-0 md:gap-0 md:flex-row min-h-screen-custom">
-                    <div className="w-full md:w-1/2 md:pt-20 bg-gray-500">
+                <div className="flex flex-col gap-8 w-full md:gap-0 md:flex-row min-h-screen-custom">
+                    <div className="w-full py-8 md:w-1/2 md:pt-20 bg-gray-500">
                         <Slider {...settings}>
                             {
                                 post ? (
@@ -138,7 +138,7 @@ const Post_Page = ({post: initial}) => {
                         </Slider>
                     </div>
                     <div className="w-full md:w-1/2 ">
-                        <div className="p-4">
+                        <div className="px-4 pb-4">
                             <div className={'content'}>
                                 {
                                     post ? (
