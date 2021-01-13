@@ -67,7 +67,7 @@ export default async (req, res) => {
                         strict: false,
                     })
 
-                    res.status(201).json({success: true})
+                    res.status(200).json({success: true})
                 })
             } catch (e) {
                 res.status(404).json({success: false})

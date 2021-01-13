@@ -2,10 +2,10 @@ import useSWR from "swr";
 import CommentList from "./Comment--List";
 
 
-const Comment = ({postId, me, setComments}) => {
-    const {data: comments} = useSWR(`/api/posts/${postId}/comments`, {
+const Comment = ({postId, me, comments}) => {
+    /*const {data: comments} = useSWR(`/api/posts/${postId}/comments`, {
         onSuccess: data => setComments(data)
-    })
+    })*/
 
     if (!comments) {
 

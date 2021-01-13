@@ -29,7 +29,7 @@ const settings = {
 
 const Post_Page = ({post: initial}) => {
     const [anchorEl, setAnchorEl] = useState(null)
-    const [comments, setComments] = useState([])
+    // const [comments, setComments] = useState([])
 
     const inputRef = createRef()
 
@@ -40,6 +40,7 @@ const Post_Page = ({post: initial}) => {
     const {data: post} = useSWR(`/api/posts/${postId}`, {
         initialData: initial,
     })
+    const {data: comments} = useSWR(`/api/posts/${postId}/comments`)
 
 
     const deletePost = async () => {
@@ -47,12 +48,9 @@ const Post_Page = ({post: initial}) => {
         try {
             if (confirm('ต้องการลบโพสต์หรือไม่')) {
                 NProgress.start()
-                const resp = await fetch(`/api/posts/${postId}`, {
-                    method: 'DELETE',
-                })
+                const resp = await axios.delete(`/api/posts/${postId}`)
 
-                if (resp?.status === 200) {
-                    mutate('/api/posts')
+                if (resp.status === 200) {
                     NProgress.done()
                     replace('/')
                 }
@@ -89,7 +87,7 @@ const Post_Page = ({post: initial}) => {
 
                 setTimeout(() => {
                     inputEl.innerHTML = ''
-                },100)
+                },0)
 
 
                 await axios.post(`/api/posts/${postId}/comments`, {
@@ -329,7 +327,7 @@ const Post_Page = ({post: initial}) => {
                                     <CommentInput me={me} ref={inputRef} func={addComment} />
                                 }
                                 <Comment
-                                    setComments={setComments}
+                                    comments={comments}
                                     postId={postId}
                                     me={me}
                                 />
