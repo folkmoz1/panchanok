@@ -109,6 +109,8 @@ const Post_Page = ({post: initial}) => {
                 pathname: '/u/login',
                 query: {redirect: asPath}
             }, '/u/login?r=true')
+            
+            return
         }
 
         try {
