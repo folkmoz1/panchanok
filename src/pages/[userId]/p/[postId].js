@@ -15,6 +15,7 @@ import CustomMenu from "../../../components/Popup/Menu";
 import axios from "axios";
 import Comment from "../../../components/Comment";
 import CommentInput from "../../../components/Comment/Comment--Input";
+import Actions from "../../../components/Actions";
 
 const settings = {
     dots: true,
@@ -69,7 +70,7 @@ const Post_Page = ({post: initial}) => {
             if (inputEl.innerText.trim() !== '') {
                 const text = inputEl.innerText
                 while (inputEl.firstChild) inputEl.removeChild(inputEl.firstChild)
-                const resp = await axios.put(`/api/posts/${postId}`, {
+                const resp = await axios.post(`/api/posts/${postId}/comments`, {
                     content: text
                 })
 
@@ -102,24 +103,63 @@ const Post_Page = ({post: initial}) => {
         }
     }
 
+    const addActions = async (data, liked) => {
+        try {
+            if (!liked) {
+                await axios.post(`/api/posts/${postId}/actions`)
+
+                mutate(`/api/posts/${postId}/actions`, [
+                    ...data,
+                    {
+                        owner: me.id,
+                        fullName: `${me.firstName} ${me.lastName}`,
+                        username: me.username,
+                        profile: me.image
+                    }
+                ], false)
+
+                mutate(`/api/posts/${postId}`,{
+                    ...post,
+                    actions: post.actions + 1
+                })
+
+            } else {
+                await axios.put(`/api/posts/${postId}/actions`)
+
+                const newData = data.filter(i => i.owner !== me.id)
+
+                mutate(`/api/posts/${postId}/actions`,
+                    newData, false)
+
+                mutate(`/api/posts/${postId}`,{
+                    ...post,
+                    actions: post.actions - 1
+                })
+            }
+
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
 
     return (
         <>
-            <div className={'max-w-screen-xl pb-20 md:p-0'}>
+            <div className={'pb-20 md:p-0'}>
                 <div className="flex flex-col gap-8 w-full md:gap-0 md:flex-row min-h-screen-custom">
-                    <div className="w-full py-8 md:w-1/2 md:pt-20 bg-gray-500">
+                    <div className="w-full py-8 md:w-1/2  flex-1  md:pt-20 bg-gray-custom">
                         <Slider {...settings}>
                             {
                                 post ? (
                                     post.images.map(i => (
                                         <span key={i.public_id}>
-                                            <div className={'relative p-2 slider flex justify-center md:p-0'}>
+                                            <div className={'relative p-2 slide  flex justify-center md:p-0'}>
                                                 <Image
                                                     src={i.url}
-                                                    width={350}
-                                                    height={450}
-                                                    objectFit={"cover"}
+                                                    width={700}
+                                                    height={700}
+                                                    objectFit={"contain"}
                                                     alt={post.title}
                                                     quality={100}
                                                     loading={"eager"}
@@ -137,7 +177,7 @@ const Post_Page = ({post: initial}) => {
                             }
                         </Slider>
                     </div>
-                    <div className="w-full md:w-1/2 ">
+                    <div className="w-full max-w-md">
                         <div className="px-4 pb-4">
                             <div className={'content'}>
                                 {
@@ -251,58 +291,31 @@ const Post_Page = ({post: initial}) => {
                                         )
                                     }
                                 </div>
-                                <div className={'text-right text-xs text-gray-500 mb-0.5'}>
+                                <div className={'text-right text-xs text-gray-500 mb-0.5 px-2'}>
                                     {
                                         post &&
-                                        <Tooltip
-                                            title={'คลิ๊กเพื่อดูความคิดเห็น'}
-                                            className={'w-1/3 ml-auto md:cursor-pointer'}
-                                        >
-                                            <p>ความคิดเห็นทั้งหมด {post.comments}</p>
-                                        </Tooltip>
+                                        <>
+                                            <span
+                                                className={'ml-auto md:cursor-pointer flex justify-between items-end'}
+                                            >
+                                                {
+                                                    post.actions !== 0 &&
+                                                    <p>ถูกใจ {post.actions} คน</p>
+                                                }
+                                                {
+                                                    post.comments !== 0 &&
+                                                    <p>ความคิดเห็นทั้งหมด {post.comments}</p>
+                                                }
+                                            </span>
+                                        </>
                                     }
                                 </div>
-                                <div className={'flex justify-between items-center py-2 gap-2'}>
-                                    <div className={'flex-0'}>
-                                        <button className={'flex items-center py-2 px-4 rounded-2xl bg-gray-100 hover:bg-gray-200'}>
-                                            <span className={'flex-0 mr-4'}>
-                                                <img src="/images/svg/svg--unlike.svg" width={18} height={18} alt="unlike icon"/>
-                                            </span>
-                                            <span className={'flex-1'}>
-                                                Like
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <div className={'flex-1'}>
-                                        <button
-                                            onClick={() => {
-                                                if (me) inputRef.current.focus()
-                                                else Router.push({
-                                                    pathname: '/u/login',
-                                                    query: {redirect: Router.asPath}
-                                                }, '/u/login?r=true')
-                                            }}
-                                            className={'flex items-center justify-center py-2 px-4 rounded-2xl bg-gray-100 hover:bg-gray-200 w-full'}
-                                        >
-                                            <span className={'mr-4'}>
-                                                <img src="/images/svg/svg--comment.svg" width={18} height={18} alt="unlike icon"/>
-                                            </span>
-                                            <span>
-                                                Comment
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <div className={'flex-0'}>
-                                        <button className={'flex items-center py-2 px-4 rounded-2xl bg-gray-100 hover:bg-gray-200'}>
-                                            <span className={'flex-0 mr-4'}>
-                                                <img src="/images/svg/svg--share.svg" width={18} height={18} alt="unlike icon"/>
-                                            </span>
-                                            <span className={'flex-1'}>
-                                                Share
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
+                                <Actions
+                                    me={me}
+                                    postId={postId}
+                                    addActions={addActions}
+                                    inputRef={inputRef}
+                                />
                                 <hr className={'mb-3'}/>
                                 {
                                     me &&
@@ -354,12 +367,8 @@ const Post_Page = ({post: initial}) => {
               }
 
               .slider > div {
-                box-shadow: 0 0 6px rgba(0, 0, 0, .6);
-                border-radius: 1rem;
-                overflow: hidden;
-                height: 450px;
-                width: 350px;
-
+                height: 500px;
+                width: 600px;
               }
 
               .slick-dots li:hover button:before {
@@ -369,7 +378,11 @@ const Post_Page = ({post: initial}) => {
               }
 
               .slick-active button:before {
-                color: #cb3837 !important;
+                color: #ff0100 !important;
+              }
+
+              .slick-dots li:not(.slick-active) button:before {
+                color: rgb(255, 255, 255) !important;
               }
 
               .content {
@@ -382,10 +395,6 @@ const Post_Page = ({post: initial}) => {
                 color: gray;
               }
 
-              .author {
-                font-size: 200%;
-                font-weight: bold;
-              }
             `}</style>
         </>
     )

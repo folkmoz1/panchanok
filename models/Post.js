@@ -16,7 +16,7 @@ const PostSchema = new mongoose.Schema({
     desc: {
         type: String,
     },
-    action: {
+    actions: {
         type: Array
     },
     comments: {

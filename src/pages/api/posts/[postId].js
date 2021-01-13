@@ -23,6 +23,8 @@ export default async (req, res) => {
 
                 post.comments = post.comments.length
 
+                post.actions = post.actions.length
+
                 res.status(200).json({success: true, data: post})
             } catch (e) {
                 res.status(404).json({success: false})
@@ -30,46 +32,17 @@ export default async (req, res) => {
             break
         case 'PUT' :
             try {
-                const { content } = req.body
-                jwt.verify(token, process.env.TOKEN_SECRET, {}, async (err, result) => {
-                    if (err) throw new Error()
 
-                    const { sub, email, version } = result
-
-                    const { user, valid } = await checkTokenVersion(sub, version)
-
-                    if (!valid) throw new Error()
-
-                    const post = await Post.findById(postId)
-
-                    const { comments } = post
-
-                    const data = {
-                        owner: user._id.toString(),
-                        fullName: `${user.firstName} ${user.lastName}`,
-                        username: user.username,
-                        content,
-                        createdAt: Date.now(),
-                        profile: user.image
-                    }
-
-                    await post.updateOne({
-                        comments: [...comments, data]
-                    })
-
-                    res.status(200).json({success: true})
-                })
             } catch (e) {
-                res.status(400).json({success: false})
+                res.status(404)
                 res.end()
             }
-            break
         case 'DELETE':
             try {
                 jwt.verify(token, process.env.TOKEN_SECRET, {}, async (err, result) => {
                     if (err) throw new Error()
 
-                    const { sub, email, version } = result
+                    const { sub, version } = result
 
                     const { user, valid } = await checkTokenVersion(sub, version)
 
@@ -96,9 +69,6 @@ export default async (req, res) => {
 
                     res.status(201).json({success: true})
                 })
-
-
-                res.status(200).json({success: true})
             } catch (e) {
                 res.status(404).json({success: false})
             }

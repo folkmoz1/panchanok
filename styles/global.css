@@ -53,6 +53,14 @@ button:disabled {
 
 @tailwind utilities;
 
+.bg-gray-custom {
+    background: #111111;
+}
+
+.bg-blue-custom {
+    background: #d2fdff;
+}
+
 .min-h-screen-custom {
     min-height: calc(100vh - 70px);
 }
