@@ -73,7 +73,7 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
         try {
             const token = cookie.get('tr--')
 
-            const resp = await axios.get(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/me`,{
+            const resp = await axios.post(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/me`, null,{
                 headers: {
                     cookie: token
                 }

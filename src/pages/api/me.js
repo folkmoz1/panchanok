@@ -14,11 +14,9 @@ export default async (req, res) => {
         headers: { cookie }
     } = req
 
-        try {
-            jwt.verify(cookie, process.env.TOKEN_SECRET, {}, async (err, result) => {
-                if (err) throw new Error()
-
-                const {sub, version} = result
+        if (method === 'POST') {
+            try {
+                const {sub, version } = jwt.verify(cookie, process.env.TOKEN_SECRET)
 
                 const {user, valid} = await checkTokenVersion(sub, version)
 
@@ -26,12 +24,15 @@ export default async (req, res) => {
 
 
                 res.status(200).json({success: true, userJSON: getUserJSON(user)})
-            })
-        } catch (e) {
-            cookies.set('tr--')
-            cookies.set('ta--')
-            res.status(401).json({success: false})
-            res.end()
+            } catch (e) {
+                cookies.set('tr--')
+                cookies.set('ta--')
+                res.status(401).json({success: false, message: 'Not Authenticate'})
+                res.end()
+            }
+        } else {
+            res.status(401).json({success: false, message: 'Not Authenticate'})
+
         }
 
 }
