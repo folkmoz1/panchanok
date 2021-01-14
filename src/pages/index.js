@@ -9,7 +9,7 @@ import { useState } from "react";
 const Home = ({ posts: initialData, isSsr }) => {
     const [currentPost, setCurrentPost] = useState(null)
 
-    const { data: posts, error } = useSWR(!isSsr ? '/api/posts' : null, {
+    const { data: posts, error } = useSWR('/api/posts' , {
         revalidateOnMount: true,
         initialData
     })

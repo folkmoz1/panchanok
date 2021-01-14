@@ -166,7 +166,10 @@ export default function Header() {
                                     <>
                                         <div
                                             aria-describedby={'avatar-popup'}
-                                            className={'avatar'} onClick={avatarClick}>
+                                            className={'avatar'}
+                                            aria-haspopup="true"
+                                            onClick={avatarClick}
+                                        >
                                             <Image
                                                 src={me.image}
                                                 width={35}
