@@ -1,13 +1,29 @@
-import Router from "next/router";
 import axios from "axios";
+import useSWR from "swr";
+import {useRouter} from "next/router";
+import {useEffect} from "react";
 
 
-const UserProfile = ({ }) => {
+const UserProfile = ({ user:initial }) => {
+    const { query: { userId } } = useRouter()
+
+    const { data: user } = useSWR(`/api/users/${userId.slice(1)}`,{
+        initialData: initial,
+        onSuccess: data => console.log(data)
+    })
+
+    useEffect(() => {
+        console.log(userId)
+    },[userId])
+
+    if (!user) {
+        return <h1>loading</h1>
+    }
 
     return (
         <>
             <div>
-
+                get user
             </div>
         </>
     )
@@ -23,17 +39,18 @@ UserProfile.getInitialProps = async ({ req, res, query: {userId} }) => {
 
             const {user, success} = resp.data
 
-            if (!success) throw new Error()
+            if (!success) throw new Error('ไม่เจอผู้ใช้งานนี้')
 
             return {user}
 
         } catch (e) {
-            console.log(e)
+            console.log(e.message)
+            return {user: null}
+
         }
-    } else {
-        return {user: null}
     }
 
+    return {user: null}
 
 }
 

@@ -33,7 +33,6 @@ export default async (req, res) => {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'strict',
-                maxAge: 60 * 60 * 24 * 15,
                 path: '/'
             })
 
@@ -41,7 +40,6 @@ export default async (req, res) => {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'strict',
-                maxAge: 3600,
                 path: '/'
             })
 

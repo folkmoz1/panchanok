@@ -10,7 +10,7 @@ import useResize from "../../../hooks/useResize";
 import {CardHeader, IconButton, MenuList, Tooltip} from "@material-ui/core";
 import Link from "next/link";
 import {DeleteOutlined, MoreVert} from "@material-ui/icons";
-import {createRef, useState} from "react";
+import {createRef, useEffect, useRef, useState} from "react";
 import CustomMenu from "../../../components/Popup/Menu";
 import axios from "axios";
 import Comment from "../../../components/Comment";
@@ -22,9 +22,9 @@ import Actions from "../../../components/Actions";
 
 const Post_Page = ({post: initial}) => {
     const [anchorEl, setAnchorEl] = useState(null)
-    // const [comments, setComments] = useState([])
 
     const inputRef = createRef()
+    const scrollIntoView = useRef(null)
 
     const {query: {postId}, replace, push, asPath} = useRouter()
     const {me} = useAuth()
@@ -55,11 +55,30 @@ const Post_Page = ({post: initial}) => {
         }
     }
 
+    useEffect(() => {
+        const sidebarEl = document.querySelector('.sidebar')
+
+        const addClass = () => {
+            const scrollY = sidebarEl.scrollTop
+
+            if (scrollY >= 350 ) {
+                sidebarEl.classList.add('--active')
+            } else {
+                sidebarEl.classList.remove('--active')
+            }
+        }
+        sidebarEl.addEventListener('scroll', addClass)
+
+        return () => sidebarEl.removeEventListener('scroll', addClass)
+
+    },[])
+
+
     const addComment = async () => {
         const inputEl = inputRef.current
         try {
             if (inputEl.innerText.trim() !== '') {
-                const text = inputEl.innerText
+                const text = inputEl.innerText.trim()
                 while (inputEl.firstChild) inputEl.removeChild(inputEl.firstChild)
                 mutate(`/api/posts/${postId}/comments`, [
                     ...comments,
@@ -78,8 +97,11 @@ const Post_Page = ({post: initial}) => {
                     comments: post.comments + 1
                 }, false)
 
+
+
                 setTimeout(() => {
                     inputEl.innerHTML = ''
+                    scrollIntoView.current.scrollIntoView({behavior: "smooth"})
                 },0)
 
 
@@ -188,7 +210,7 @@ const Post_Page = ({post: initial}) => {
                             }
                         </Slider>
                     </div>
-                    <div className="w-full md:max-w-md">
+                    <div className="w-full md:max-w-md md:overflow-auto sidebar">
                         <div className="px-4 pb-4">
                             <div className={'content'}>
                                 {
@@ -337,22 +359,45 @@ const Post_Page = ({post: initial}) => {
                                     postId={postId}
                                     me={me}
                                 />
+                                <span ref={scrollIntoView}/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <style jsx global>{`
-              #__next::-webkit-scrollbar {
-                width: .25rem;
+              .sidebar::-webkit-scrollbar {
+                width: .5rem;
               }
 
-              #__next::-webkit-scrollbar-thumb {
+              .sidebar::-webkit-scrollbar-thumb {
                 background-color: #a0f8e6;
               }
 
-              #__next::-webkit-scrollbar-track {
-                background-color: #cac6c6;
+              .sidebar::-webkit-scrollbar-track {
+                background-color: #444;
+              }
+              
+              #__next {
+                overflow: hidden;
+              }
+              
+              .sidebar.--active .comment--wrapper {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                z-index: 5;
+                max-width: 440px;
+                right: .5rem;
+                padding: .5rem;
+              }
+              
+              .sidebar.--active .comment--wrapper ul {
+                padding-bottom: 2rem;
+              }
+              
+              .sidebar {
+                height: calc(100vh - 70px);
               }
 
               .avatar--wrapper {
@@ -410,6 +455,12 @@ const Post_Page = ({post: initial}) => {
 
               .timestamp {
                 color: gray;
+              }
+              
+              @media (max-width: 768px) {
+                #__next {
+                  overflow:auto;
+                }
               }
 
             `}</style>

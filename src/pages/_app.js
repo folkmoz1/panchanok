@@ -73,9 +73,7 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
         try {
             const token = cookie.get('tr--')
 
-            const { sub, email } = jwt.verify(token, process.env.TOKEN_SECRET)
-
-            const resp = await axios.post(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/users/${sub}`, null,{
+            const resp = await axios.get(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/me`,{
                 headers: {
                     cookie: token
                 }
@@ -87,7 +85,7 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
 
             loggedIn = true
 
-            const newToken = jwt.sign({sub, email}, process.env.TOKEN_SECRET,{
+            const newToken = jwt.sign({sub: userJSON.id, email: userJSON.email}, process.env.TOKEN_SECRET,{
                 expiresIn: '1h'
             })
 
@@ -95,7 +93,6 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'strict',
-                maxAge: 3600,
                 path: '/'
             }))
         }  catch (e) {

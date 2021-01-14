@@ -49,6 +49,7 @@ const CommentInput = forwardRef(({children, func, me}, ref) => {
               .comment--wrapper {
                 display: flex;
                 justify-content: space-between;
+                background-color: #fff;
               }
 
               @media (max-width: 768px) {
