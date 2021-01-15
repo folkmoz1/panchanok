@@ -91,7 +91,7 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
 
             res.setHeader('Set-Cookie', serialize('ta', newToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
+                secure: false,
                 sameSite: 'strict',
                 path: '/'
             }))

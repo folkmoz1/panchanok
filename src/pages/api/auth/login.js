@@ -31,14 +31,14 @@ export default async (req, res) => {
 
             cookie.set('tr', rfToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
+                secure: false,
                 sameSite: 'strict',
                 path: '/'
             })
 
             cookie.set('ta', acToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
+                secure: false,
                 sameSite: 'strict',
                 path: '/'
             })
