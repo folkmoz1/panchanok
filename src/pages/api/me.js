@@ -25,13 +25,11 @@ export default async (req, res) => {
 
                 res.status(200).json({success: true, userJSON: getUserJSON(user)})
             } catch (e) {
-                cookies.set('tr--')
-                cookies.set('ta--')
                 res.status(401).json({success: false, message: 'Not Authenticate'})
                 res.end()
             }
         } else {
-            res.status(401).json({success: false, message: 'Not Authenticate'})
+            res.status(404).json({success: false, message: 'Not Authenticate'})
 
         }
 

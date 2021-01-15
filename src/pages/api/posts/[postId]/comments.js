@@ -12,7 +12,7 @@ export default async (req, res) => {
 
     await dbConnect()
     const cookies = new Cookies(req, res)
-    const token = cookies.get('tr--')
+    const token = cookies.get('tr')
 
     switch (method) {
         case 'GET':

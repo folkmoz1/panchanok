@@ -9,7 +9,7 @@ import {NProgress} from '../../../../utils/NProgress'
 import useResize from "../../../hooks/useResize";
 import {CardHeader, IconButton, MenuList, Tooltip} from "@material-ui/core";
 import Link from "next/link";
-import {DeleteOutlined, MoreVert} from "@material-ui/icons";
+import {ArrowBackIosRounded, ArrowForwardIosRounded, DeleteOutlined, MoreVert} from "@material-ui/icons";
 import {createRef, useEffect, useRef, useState} from "react";
 import CustomMenu from "../../../components/Popup/Menu";
 import axios from "axios";
@@ -22,6 +22,7 @@ import Actions from "../../../components/Actions";
 
 const Post_Page = ({post: initial}) => {
     const [anchorEl, setAnchorEl] = useState(null)
+    const [currentImage, setCurrentImage] = useState(0)
 
     const inputRef = createRef()
     const scrollIntoView = useRef(null)
@@ -35,6 +36,7 @@ const Post_Page = ({post: initial}) => {
     })
     const {data: comments} = useSWR(`/api/posts/${postId}/comments`)
 
+    let imgLength = post ? post.images.length - 1 : null
 
     const deletePost = async () => {
         setAnchorEl(null)
@@ -67,7 +69,11 @@ const Post_Page = ({post: initial}) => {
                 sidebarEl.classList.remove('--active')
             }
         }
-        sidebarEl.addEventListener('scroll', addClass)
+        if (!isMobile) {
+            sidebarEl.addEventListener('scroll', addClass)
+        } else {
+            sidebarEl.removeEventListener('scroll', addClass)
+        }
 
         return () => sidebarEl.removeEventListener('scroll', addClass)
 
@@ -161,45 +167,67 @@ const Post_Page = ({post: initial}) => {
         }
     }
 
+    const handleImage = side => {
 
-    const settings = {
-        dots: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: true,
-        fade: true,
-        customPaging: i => post.images.length > 1 && (
-            <a>
-                <Image src={post.images[i].url} alt={'dots slide'} width={50} height={50} objectFit={"cover"} />
-            </a>
-        )
-    };
+        if (side === 'next' && currentImage + 1 <= imgLength) {
+            setCurrentImage(currentImage +1 )
+        } else if (side === 'prev' && currentImage - 1 >= 0) {
+            setCurrentImage(currentImage - 1)
+        }
+
+
+    }
+
 
     return (
         <>
             <div className={'pb-20 md:p-0'}>
                 <div className="flex flex-col gap-8 w-full md:gap-0 md:flex-row min-h-screen-custom">
-                    <div className="w-full py-8 md:w-1/2  flex-1  md:pt-20 bg-gray-custom">
-                        <Slider {...settings}>
+                    <div className="w-full py-8 md:w-1/2  flex-1  md:pt-20 bg-gray-custom relative picture--side">
+
                             {
+
                                 post ? (
-                                    post.images.map(i => (
-                                        <span key={i.public_id}>
-                                            <div className={'relative p-2 slide  flex justify-center md:p-0'}>
-                                                <Image
-                                                    src={i.url}
-                                                    width={600}
-                                                    height={600}
-                                                    objectFit={"contain"}
-                                                    alt={post.title}
-                                                    quality={100}
-                                                    loading={"eager"}
-                                                />
+                                    <>
+                                        {
+                                            imgLength > 1 && currentImage !== 0 &&
+                                            <div
+                                                className={'left--arrow md:cursor-pointer'}
+                                                onClick={() => handleImage('prev')}
+                                            >
+                                                <ArrowBackIosRounded fontSize={"large"} />
                                             </div>
+                                        }
+                                        {
+                                            post.images.map((img, index) => (
+                                                <span key={img.public_id} className={`${currentImage === index ? 'block': 'd-none'}` }>
+                                                <div className={'relative p-2 slide  flex justify-center md:p-0'}>
+                                                    <Image
+                                                        src={img.url}
+                                                        width={600}
+                                                        height={600}
+                                                        objectFit={"contain"}
+                                                        alt={post.title}
+                                                        quality={100}
+                                                        loading={"eager"}
+                                                    />
+                                                </div>
+                                            </span>
+                                            ))
+                                        }
+                                        {
+                                            imgLength > 1 && currentImage !== imgLength &&
+                                            <div
+                                                className={'right--arrow md:cursor-pointer'}
+                                                onClick={() => handleImage('next')}
+                                            >
+                                                <ArrowForwardIosRounded fontSize={"large"} />
+                                            </div>
+                                        }
+                                        <span className={'total--picture text-gray-200'}>
+                                            {`${currentImage + 1}/${imgLength + 1}`}
                                         </span>
-                                    ))
+                                    </>
                                 ) : (
                                     <span>
                                         <div className={'flex items-center justify-center'}>
@@ -208,11 +236,10 @@ const Post_Page = ({post: initial}) => {
                                     </span>
                                 )
                             }
-                        </Slider>
                     </div>
                     <div className="w-full md:max-w-md md:overflow-auto sidebar">
                         <div className="px-4 pb-4">
-                            <div className={'content'}>
+                            <div className={'flex flex-col'}>
                                 {
                                     post ? (
                                         <>
@@ -240,7 +267,7 @@ const Post_Page = ({post: initial}) => {
                                                 }
                                                 subheader={
                                                     <Tooltip title={dayjs(post.createdAt).add(543,'year').format('DD MMMM YYYY')}>
-                                                        <p className={'timestamp'}>{dayjs(post.createdAt).fromNow(true)}ที่ผ่านมา</p>
+                                                        <p className={'text-gray-400'}>{dayjs(post.createdAt).fromNow(true)}ที่ผ่านมา</p>
                                                     </Tooltip>
                                                 }
                                                 action={
@@ -366,6 +393,53 @@ const Post_Page = ({post: initial}) => {
                 </div>
             </div>
             <style jsx global>{`
+              .total--picture {
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                color: #fff;
+                font-size: 1rem;
+              }
+
+              .picture--side:hover .left--arrow,.picture--side:hover .right--arrow {
+                opacity: 1;
+              }
+
+              .left--arrow {
+                position: absolute;
+                left: 0;
+                top: 0;
+                padding-left: 1rem;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                width: 70px;
+                color: #fff;
+                transition: all .2s;
+                opacity: 0;
+                z-index: 4;
+              }
+              
+              .right--arrow {
+                position: absolute;
+                right: 0;
+                top: 0;
+                padding-right: 1rem;
+                height: 100%;
+                justify-content: center;
+                display: flex;
+                align-items: center;
+                width: 70px;
+                color: #fff;
+                transition: all .2s;
+                opacity: 0;
+                z-index: 4;
+              }
+              
+              .right--arrow:hover , .left--arrow:hover {
+                background-color: rgba(255, 255, 255, .15);
+              }
+              
               .sidebar::-webkit-scrollbar {
                 width: .5rem;
               }
@@ -377,11 +451,11 @@ const Post_Page = ({post: initial}) => {
               .sidebar::-webkit-scrollbar-track {
                 background-color: #444;
               }
-              
+
               #__next {
                 overflow: hidden;
               }
-              
+
               .sidebar.--active .comment--wrapper {
                 position: fixed;
                 bottom: 0;
@@ -391,11 +465,11 @@ const Post_Page = ({post: initial}) => {
                 right: .5rem;
                 padding: .5rem;
               }
-              
+
               .sidebar.--active .comment--wrapper ul {
-                padding-bottom: 2rem;
+                padding-bottom: 3.5rem;
               }
-              
+
               .sidebar {
                 height: calc(100vh - 70px);
               }
@@ -407,59 +481,30 @@ const Post_Page = ({post: initial}) => {
                 overflow: hidden;
               }
 
-              .slick-list, .slick-track {
-                touch-action: pan-y;
-              }
-
               .desc {
                 font-size: 120%;
                 min-height: 70px;
               }
 
-              img[alt="${post && post.author}"] {
-                width: 100%;
-                height: 100%;
-                border-radius: 1rem;
-              }
 
-              .slider > div {
-                height: 500px;
-                width: 600px;
-              }
-              
-              .slick-dots {
-                bottom: -70px;
-              }
-              
-              .slick-dots li {
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                overflow: hidden;
-              }
-              
-
-              .slick-active button:before {
-                color: #ff0100 !important;
-              }
-
-              .slick-dots li:not(.slick-active) {
-                filter: grayscale(1);
-              }
-
-              .content {
-                display: flex;
-                flex-direction: column;
-
-              }
-
-              .timestamp {
-                color: gray;
-              }
-              
               @media (max-width: 768px) {
                 #__next {
-                  overflow:auto;
+                  overflow: auto;
+                }
+                
+                .left--arrow, .right--arrow {
+                  width: 40px;
+                  padding: 0;
+                  opacity: 1;
+                }
+                
+                .total--picture {
+                  font-size: .75rem;
+                  bottom: 5px;
+                }
+                
+                .sidebar {
+                  height: auto;
                 }
               }
 

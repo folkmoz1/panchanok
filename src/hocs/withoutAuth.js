@@ -13,7 +13,7 @@ export default function withoutAuth(WrappedComponent, location = '/') {
       return useIsAuthenticated();
     },
     serverCondition: function withoutAuthServerCondition(ctx) {
-      return !!ctx.req?.cookies['tr--'];
+      return !!ctx.req?.cookies['tr'];
     }
   });
 }

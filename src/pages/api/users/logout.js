@@ -12,9 +12,11 @@ export default async (req, res) => {
 
     const Cookie = new Cookies(req, res)
 
+    const token = Cookie.get('tr')
+
+
     if (method === 'POST') {
         try {
-            const token = Cookie.get('tr--')
 
             const { sub, email, version } = verifyRefreshToken(token)
 
@@ -28,8 +30,8 @@ export default async (req, res) => {
 
             await user.save()
 
-            Cookie.set('tr--')
-            Cookie.set('ta--')
+            Cookie.set('tr')
+            Cookie.set('ta')
 
             res.status(200).json({success: true})
 

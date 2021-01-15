@@ -36,7 +36,7 @@ export default async (req, res) => {
             const acToken = jwt.sign(payload, process.env.TOKEN_SECRET,{ expiresIn: '15m'})
             const rfToken = jwt.sign({...payload, version: newUser?.tokenVersion}, process.env.TOKEN_SECRET,{ expiresIn: '15d'})
 
-            cookie.set('tr--', rfToken, {
+            cookie.set('tr', rfToken, {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'strict',
@@ -44,7 +44,7 @@ export default async (req, res) => {
                 path: '/'
             })
 
-            cookie.set('ta--', acToken, {
+            cookie.set('ta', acToken, {
                 httpOnly: true,
                 secure: false,
                 sameSite: 'strict',

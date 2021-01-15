@@ -1,20 +1,16 @@
 import axios from "axios";
 import useSWR from "swr";
 import {useRouter} from "next/router";
-import {useEffect} from "react";
 
 
 const UserProfile = ({ user:initial }) => {
     const { query: { userId } } = useRouter()
 
     const { data: user } = useSWR(`/api/users/${userId.slice(1)}`,{
-        initialData: initial,
-        onSuccess: data => console.log(data)
+        initialData: initial
     })
 
-    useEffect(() => {
-        console.log(userId)
-    },[userId])
+
 
     if (!user) {
         return <h1>loading</h1>

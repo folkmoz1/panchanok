@@ -14,7 +14,7 @@ export default async (req, res) => {
 
     const cookies = new Cookies(req, res)
 
-    const token = cookies.get('tr--')
+    const token = cookies.get('tr')
 
     switch (method) {
         case 'GET':

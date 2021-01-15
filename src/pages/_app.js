@@ -71,7 +71,7 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
         const cookie = new Cookies(req, res)
 
         try {
-            const token = cookie.get('tr--')
+            const token = cookie.get('tr')
 
             const resp = await axios.post(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/me`, null,{
                 headers: {
@@ -89,13 +89,14 @@ MyApp.getInitialProps = async ({ ctx, Component, router }) => {
                 expiresIn: '1h'
             })
 
-            res.setHeader('Set-Cookie', serialize('ta--', newToken, {
+            res.setHeader('Set-Cookie', serialize('ta', newToken, {
                 httpOnly: true,
-                secure: false,
+                secure: process.env.NODE_ENV !== 'development',
                 sameSite: 'strict',
                 path: '/'
             }))
         }  catch (e) {
+            cookie.set('tr')
             user = null
             loggedIn = false
         }

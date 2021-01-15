@@ -9,10 +9,22 @@ export default async (req, res) => {
     await dbConnect()
     const cookies = new Cookies(req, res)
 
+    const token = cookies.get('tr')
+
+
     switch (method) {
         case 'GET':
             try {
                 const posts = await Post.find({}).sort({createdAt: 'desc'})
+
+                posts.map(post => {
+                    post.comments = null
+                    post.actions = null
+                    post.images =
+                        post.images.filter((img, index) => index === 0)
+
+                    return post
+                })
 
                 res.status(200).json({success: true, data: posts})
             } catch (e) {
@@ -21,7 +33,6 @@ export default async (req, res) => {
             break
         case 'POST':
             try {
-                const token = cookies.get('tr--')
 
                 jwt.verify(token, process.env.TOKEN_SECRET, {}, async (err, result) => {
                     if (err) throw new Error()
