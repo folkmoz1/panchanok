@@ -183,7 +183,7 @@ const Post_Page = ({post: initial}) => {
         <>
             <div className={'pb-20 md:p-0'}>
                 <div className="flex flex-col gap-8 w-full md:gap-0 md:flex-row min-h-screen-custom">
-                    <div className="w-full py-8 md:w-1/2  flex-1  md:pt-20 bg-gray-custom relative picture--side">
+                    <div className="w-full py-8 md:w-1/2  flex-1  md:pt-20 bg-gray-custom relative picture--side select-none">
 
                             {
 
