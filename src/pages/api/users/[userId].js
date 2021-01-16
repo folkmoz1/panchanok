@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import Cookies from 'cookies'
 import dbConnect from "../../../../utils/dbConnect";
 import User from "../../../../models/User";
@@ -21,7 +20,7 @@ export default async (req, res) => {
 
                 res.status(200).json({success: true, data: getUserJSON(user)})
             } catch (e) {
-                res.status(400).json({success: false})
+                res.status(404).json({success: false, data: null})
                 res.end()
             }
             break

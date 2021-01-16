@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
+import _ from 'lodash'
 
 
 const Home = ({ posts: initialData, isSsr }) => {
@@ -32,6 +33,8 @@ const Home = ({ posts: initialData, isSsr }) => {
     if (error) {
         return <p>error, Try again.</p>
     }
+
+    _.shuffle(posts)
 
     return (
         <>

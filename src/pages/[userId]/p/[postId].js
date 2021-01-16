@@ -204,8 +204,8 @@ const Post_Page = ({post: initial}) => {
                                                 <div className={'relative p-2 slide  flex justify-center md:p-0'}>
                                                     <Image
                                                         src={img.url}
-                                                        width={600}
-                                                        height={600}
+                                                        width={700}
+                                                        height={700}
                                                         objectFit={"contain"}
                                                         alt={post.title}
                                                         quality={100}
@@ -230,8 +230,8 @@ const Post_Page = ({post: initial}) => {
                                     </>
                                 ) : (
                                     <span>
-                                        <div className={'flex items-center justify-center'}>
-                                        <Skeleton width={350} height={450}/>
+                                        <div className={'flex items-center justify-center mt-4'}>
+                                            <Skeleton width={350} height={450}/>
                                         </div>
                                     </span>
                                 )
