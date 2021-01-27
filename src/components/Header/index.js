@@ -11,7 +11,7 @@ import CustomPopover from "../Popup/Popover";
 
 const WithoutAuthLink = ({ setIsOpen, asPath }) => (
     <>
-        <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
+        <div className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
             <Link href={{
                 pathname: '/u/login',
                 query: {redirect: asPath}
@@ -20,9 +20,9 @@ const WithoutAuthLink = ({ setIsOpen, asPath }) => (
                     SIGN IN
                 </a>
             </Link>
-        </li>
+        </div>
 
-        <li className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
+        <div className={'my-3 mx-2 md:my-0 '} onClick={() => setIsOpen(false)}>
             <Link href={{
                 pathname: '/u/register',
                 query: {redirect: asPath}
@@ -31,7 +31,7 @@ const WithoutAuthLink = ({ setIsOpen, asPath }) => (
                     SIGN UP
                 </a>
             </Link>
-        </li>
+        </div>
     </>
 )
 
@@ -148,7 +148,7 @@ export default function Header() {
                        />
                     </span>
                     <nav>
-                        <ul className={'flex items-center flex-col py-6 md:py-0 md:flex-row'}>
+                        <div className={'flex items-center flex-col py-6 md:py-0 md:flex-row'}>
                             {
                                 isMobile &&
                                 <span className={'--outer'}>
@@ -201,7 +201,7 @@ export default function Header() {
                                     />
                                 )
                             }
-                        </ul>
+                        </div>
                     </nav>
                 </div>
             </header>

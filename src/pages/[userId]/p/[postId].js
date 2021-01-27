@@ -36,7 +36,7 @@ const Post_Page = ({post: initial}) => {
     })
     const {data: comments} = useSWR(`/api/posts/${postId}/comments`)
 
-    let imgLength = post ? post.images.length - 1 : null
+    let imgLength = post ? post.images.length : null
 
     const deletePost = async () => {
         setAnchorEl(null)
@@ -216,7 +216,7 @@ const Post_Page = ({post: initial}) => {
                                             ))
                                         }
                                         {
-                                            imgLength > 1 && currentImage !== imgLength &&
+                                            imgLength > 1 && currentImage !== imgLength -1 &&
                                             <div
                                                 className={'right--arrow md:cursor-pointer'}
                                                 onClick={() => handleImage('next')}
@@ -225,7 +225,7 @@ const Post_Page = ({post: initial}) => {
                                             </div>
                                         }
                                         <span className={'total--picture text-gray-200'}>
-                                            {`${currentImage + 1}/${imgLength + 1}`}
+                                            {`${currentImage + 1}/${imgLength}`}
                                         </span>
                                     </>
                                 ) : (
